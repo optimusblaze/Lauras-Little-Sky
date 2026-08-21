@@ -455,34 +455,27 @@ body {
 
 
 /* =========================================================
-   HISTORICAL SKY
+   HISTORICAL SKY PANEL
 ========================================================= */
 
 .historical-sky {
-
     position: absolute;
-
     inset: 0;
-
     z-index: 55;
 
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
 
     background:
         radial-gradient(
             circle at 50% 45%,
-            rgba(24, 43, 82, 0.96),
-            rgba(2, 5, 17, 0.99)
+            rgba(18, 35, 72, 0.96),
+            rgba(1, 4, 15, 0.99)
         );
 
     opacity: 0;
-
     pointer-events: none;
 
     transition:
@@ -490,10 +483,48 @@ body {
 }
 
 .historical-sky.visible {
-
     opacity: 1;
-
     pointer-events: auto;
+}
+
+
+/* =========================================================
+   HISTORICAL SKY TITLE
+========================================================= */
+
+.historical-sky h2 {
+    position: relative;
+    z-index: 5;
+
+    font-size:
+        clamp(1.5rem, 4vw, 2.5rem);
+
+    font-weight: normal;
+
+    margin:
+        0 0 5px;
+
+    text-shadow:
+        0 0 15px rgba(255,255,255,0.25);
+}
+
+
+/* =========================================================
+   HISTORICAL SKY DATE
+========================================================= */
+
+.historical-sky-date {
+    position: relative;
+    z-index: 5;
+
+    font-size: 0.95rem;
+
+    opacity: 0.8;
+
+    margin-bottom: 15px;
+
+    text-shadow:
+        0 0 10px rgba(255,255,255,0.2);
 }
 
 
@@ -502,15 +533,98 @@ body {
 ========================================================= */
 
 #historicalSkyCanvas {
-
     position: absolute;
-
     inset: 0;
 
     width: 100%;
     height: 100%;
 
     pointer-events: none;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.historical-sky-close {
+    position: relative;
+    z-index: 5;
+
+    margin-top: 20px;
+
+    padding:
+        9px 20px;
+
+    border:
+        1px solid rgba(255,255,255,0.3);
+
+    background:
+        rgba(255,255,255,0.07);
+
+    color: white;
+
+    border-radius: 25px;
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    box-shadow:
+        0 0 15px rgba(255,255,255,0.05);
+
+    backdrop-filter:
+        blur(4px);
+}
+
+
+/* =========================================================
+   MOBILE HISTORICAL SKY
+========================================================= */
+
+@media (max-width: 600px) {
+
+    .historical-sky {
+        background:
+            radial-gradient(
+                circle at 50% 42%,
+                rgba(12, 27, 62, 0.98),
+                rgba(1, 3, 12, 1) 75%
+            );
+    }
+
+
+    .historical-sky h2 {
+
+        font-size:
+            clamp(1.35rem, 6vw, 2rem);
+
+        margin-top: -8vh;
+
+        text-shadow:
+            0 0 12px rgba(255,255,255,0.35);
+    }
+
+
+    .historical-sky-date {
+
+        font-size: 0.85rem;
+
+        margin-bottom: 10px;
+
+        opacity: 0.85;
+    }
+
+
+    .historical-sky-close {
+
+        margin-top: 14px;
+
+        padding:
+            9px 18px;
+
+        font-size: 0.85rem;
+    }
 }
 
 
