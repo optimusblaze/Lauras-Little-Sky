@@ -685,19 +685,6 @@ async function loadHistoricalSkyData() {
    TIMEZONE HANDLING
 ========================================================= */
 
-/*
-    Dundee:
-    11 June 2026 is British Summer Time = UTC+1.
-
-    Arbroath:
-    18 January 1989 is GMT = UTC+0.
-
-    We deliberately specify the offset ourselves because
-    JavaScript's Date object otherwise uses the computer's
-    current timezone rather than necessarily the historical
-    UK timezone.
-*/
-
 function getUTCDateForSky(
     dateString,
     timeString,
@@ -705,6 +692,12 @@ function getUTCDateForSky(
 ) {
 
     let offsetHours = 0;
+
+
+    /*
+        Dundee:
+        11 June 2026 = BST = UTC+1
+    */
 
     if (
         dateString === "11 June 2026"
@@ -716,11 +709,18 @@ function getUTCDateForSky(
 
 
     /*
-        Convert:
-
-        local time - UTC offset
-        -> UTC
+        Arbroath:
+        18 January 1989 = GMT = UTC+0
     */
+
+    if (
+        dateString === "18 January 1989"
+    ) {
+
+        offsetHours = 0;
+
+    }
+
 
     const parts =
         dateString.split(" ");
@@ -728,7 +728,9 @@ function getUTCDateForSky(
     const day =
         Number(parts[0]);
 
+
     const monthNames = [
+
         "January",
         "February",
         "March",
@@ -741,12 +743,15 @@ function getUTCDateForSky(
         "October",
         "November",
         "December"
+
     ];
+
 
     const month =
         monthNames.indexOf(
             parts[1]
         );
+
 
     const year =
         Number(parts[2]);
@@ -755,8 +760,10 @@ function getUTCDateForSky(
     const timeParts =
         timeString.split(":");
 
+
     const hour =
         Number(timeParts[0]);
+
 
     const minute =
         Number(timeParts[1]);
@@ -796,8 +803,10 @@ function julianDate(date) {
 function julianCenturies(jd) {
 
     return (
-        jd - 2451545.0
-    ) / 36525.0;
+        jd -
+        2451545.0
+    ) /
+    36525.0;
 }
 
 
@@ -810,6 +819,7 @@ function calculateGMST(jd) {
     const T =
         julianCenturies(jd);
 
+
     let gmst =
         280.46061837 +
         360.98564736629 *
@@ -820,8 +830,10 @@ function calculateGMST(jd) {
         (T * T * T) /
         38710000;
 
+
     gmst =
         ((gmst % 360) + 360) % 360;
+
 
     return gmst;
 }
@@ -833,16 +845,21 @@ function calculateGMST(jd) {
 
 function degToRad(deg) {
 
-    return deg *
+    return (
+        deg *
         Math.PI /
-        180;
+        180
+    );
 }
+
 
 function radToDeg(rad) {
 
-    return rad *
+    return (
+        rad *
         180 /
-        Math.PI;
+        Math.PI
+    );
 }
 
 
@@ -850,7 +867,9 @@ function radToDeg(rad) {
    NORMALISE ANGLE
 ========================================================= */
 
-function normalizeDegrees(degrees) {
+function normalizeDegrees(
+    degrees
+) {
 
     return (
         (degrees % 360) +
@@ -862,24 +881,6 @@ function normalizeDegrees(degrees) {
 /* =========================================================
    PROPAGATE HIPPARCOS POSITION
 ========================================================= */
-
-/*
-    Hipparcos positions are given at J1991.25.
-
-    The catalogue supplies:
-
-        RA
-        Dec
-        proper motion in RA
-        proper motion in Dec
-
-    We propagate those positions to the historical
-    observation date.
-
-    This is especially useful for the 1989 birthday sky,
-    because it means we aren't pretending the catalogue
-    position itself is the exact position for every epoch.
-*/
 
 function propagateStarPosition(
     star,
@@ -894,6 +895,7 @@ function propagateStarPosition(
             star.alpha ??
             star.hip_ra
         );
+
 
     let dec =
         Number(
@@ -914,17 +916,6 @@ function propagateStarPosition(
     }
 
 
-    /*
-        Try to find proper motion fields.
-
-        Hipparcos normally gives:
-            mu_alpha*
-            mu_delta
-
-        Units:
-            milliarcseconds/year
-    */
-
     const pmRa =
         Number(
             star.pmra ??
@@ -935,6 +926,7 @@ function propagateStarPosition(
             star.pm_alpha ??
             0
         );
+
 
     const pmDec =
         Number(
@@ -953,6 +945,7 @@ function propagateStarPosition(
             targetDate
         );
 
+
     const targetYear =
         2000 +
         (
@@ -967,21 +960,10 @@ function propagateStarPosition(
         1991.25;
 
 
-    /*
-        Convert mas/year to degrees/year.
-    */
-
     const masToDegrees =
         1 /
         3600000;
 
-
-    /*
-        mu_alpha* already contains cos(dec),
-        which means:
-
-        dRA = mu_alpha* / cos(dec)
-    */
 
     const cosDec =
         Math.cos(
@@ -990,7 +972,8 @@ function propagateStarPosition(
 
 
     if (
-        Math.abs(cosDec) > 0.000001 &&
+        Math.abs(cosDec) >
+        0.000001 &&
         Number.isFinite(pmRa)
     ) {
 
@@ -1016,7 +999,10 @@ function propagateStarPosition(
 
 
     ra =
-        normalizeDegrees(ra);
+        normalizeDegrees(
+            ra
+        );
+
 
     dec =
         Math.max(
@@ -1050,36 +1036,38 @@ function equatorialToHorizontal(
     const gmst =
         calculateGMST(jd);
 
+
     const lst =
         normalizeDegrees(
             gmst +
             longitude
         );
 
+
     const hourAngle =
         normalizeDegrees(
-            lst - ra
+            lst -
+            ra
         );
+
 
     const H =
         degToRad(
             hourAngle
         );
 
+
     const lat =
         degToRad(
             latitude
         );
+
 
     const declination =
         degToRad(
             dec
         );
 
-
-    /*
-        Altitude
-    */
 
     const sinAltitude =
         Math.sin(lat) *
@@ -1101,15 +1089,6 @@ function equatorialToHorizontal(
             )
         );
 
-
-    /*
-        Azimuth.
-
-        0° = North
-        90° = East
-        180° = South
-        270° = West
-    */
 
     const azimuth =
         Math.atan2(
@@ -1147,19 +1126,6 @@ function equatorialToHorizontal(
    SKY PROJECTION
 ========================================================= */
 
-/*
-    We use a stereographic-style sky dome.
-
-    Centre:
-        Zenith / directly overhead
-
-    Edge:
-        Horizon
-
-    Below horizon:
-        hidden
-*/
-
 function projectSkyPosition(
     altitude,
     azimuth,
@@ -1175,18 +1141,28 @@ function projectSkyPosition(
     }
 
 
+    /*
+        Slightly larger sky dome on mobile.
+
+        This gives the stars more room and makes
+        the historical sky easier to read on phones.
+    */
+
+    const isMobile =
+        width <= 600;
+
+
     const maxRadius =
         Math.min(
             width,
             height
         ) *
-        0.44;
+        (
+            isMobile
+                ? 0.43
+                : 0.44
+        );
 
-
-    /*
-        Zenith = radius 0
-        Horizon = radius maxRadius
-    */
 
     const zenithAngle =
         90 -
@@ -1230,6 +1206,17 @@ function projectSkyPosition(
    STAR BRIGHTNESS
 ========================================================= */
 
+/*
+    This is the part that controls how clearly the
+    real stars appear.
+
+    Smaller astronomical magnitude =
+    brighter star.
+
+    Mobile gets a deliberate boost so the stars
+    remain visible on a small screen.
+*/
+
 function getStarBrightness(
     magnitude
 ) {
@@ -1245,20 +1232,144 @@ function getStarBrightness(
 
 
     /*
-        Brighter stars have smaller magnitudes.
+        Convert astronomical magnitude into
+        a useful visual brightness value.
+
+        Bright stars:
+            magnitude 0 -> very bright
+
+        Faint stars:
+            magnitude 6 -> still visible
     */
 
-    return Math.max(
-        0.15,
+    const baseBrightness =
+        Math.pow(
+            10,
+            -0.4 *
+            magnitude
+        );
+
+
+    const normalised =
         Math.min(
-            1.0,
-            1.15 -
-            (
-                magnitude /
-                8
+            1,
+            Math.max(
+                0.08,
+                baseBrightness * 3
             )
-        )
-    );
+        );
+
+
+    return normalised;
+}
+
+
+/* =========================================================
+   STAR VISUAL SETTINGS
+========================================================= */
+
+function getStarVisualSettings(
+    magnitude
+) {
+
+    const isMobile =
+        window.innerWidth <= 600;
+
+
+    const brightness =
+        getStarBrightness(
+            magnitude
+        );
+
+
+    /*
+        Brighter stars get substantially larger.
+
+        Mobile deliberately increases both
+        size and glow.
+    */
+
+    let radius;
+
+
+    if (isMobile) {
+
+        radius =
+            Math.max(
+                1.05,
+                Math.min(
+                    4.4,
+                    1.0 +
+                    brightness * 3.4
+                )
+            );
+
+    }
+    else {
+
+        radius =
+            Math.max(
+                0.65,
+                Math.min(
+                    3.4,
+                    0.65 +
+                    brightness * 2.6
+                )
+            );
+
+    }
+
+
+    const alpha =
+        isMobile
+
+            ? Math.max(
+                0.58,
+                Math.min(
+                    1,
+                    0.55 +
+                    brightness * 0.55
+                )
+            )
+
+            : Math.max(
+                0.32,
+                Math.min(
+                    1,
+                    0.35 +
+                    brightness * 0.55
+                )
+            );
+
+
+    const glow =
+        isMobile
+
+            ? Math.max(
+                3,
+                Math.min(
+                    18,
+                    4 +
+                    brightness * 14
+                )
+            )
+
+            : Math.max(
+                2,
+                Math.min(
+                    10,
+                    2 +
+                    brightness * 8
+                )
+            );
+
+
+    return {
+        radius,
+        alpha,
+        glow,
+        brightness
+    };
 }
 
 
@@ -1272,6 +1383,7 @@ function drawHistoricalSky(
 
     const canvas =
         historicalSkyCanvas;
+
 
     const ctx =
         canvas.getContext(
@@ -1290,13 +1402,19 @@ function drawHistoricalSky(
     const width =
         window.innerWidth;
 
+
     const height =
         window.innerHeight;
+
+
+    const isMobile =
+        width <= 600;
 
 
     canvas.width =
         width *
         dpr;
+
 
     canvas.height =
         height *
@@ -1304,10 +1422,13 @@ function drawHistoricalSky(
 
 
     canvas.style.width =
-        width + "px";
+        width +
+        "px";
+
 
     canvas.style.height =
-        height + "px";
+        height +
+        "px";
 
 
     ctx.setTransform(
@@ -1346,10 +1467,12 @@ function drawHistoricalSky(
         "#142956"
     );
 
+
     gradient.addColorStop(
         0.45,
         "#08132f"
     );
+
 
     gradient.addColorStop(
         1,
@@ -1359,6 +1482,7 @@ function drawHistoricalSky(
 
     ctx.fillStyle =
         gradient;
+
 
     ctx.fillRect(
         0,
@@ -1376,10 +1500,16 @@ function drawHistoricalSky(
         Math.min(
             width,
             height
-        ) * 0.44;
+        ) *
+        (
+            isMobile
+                ? 0.43
+                : 0.44
+        );
 
 
     ctx.beginPath();
+
 
     ctx.arc(
         width / 2,
@@ -1391,10 +1521,16 @@ function drawHistoricalSky(
 
 
     ctx.strokeStyle =
-        "rgba(255,255,255,0.08)";
+        isMobile
+            ? "rgba(255,255,255,0.14)"
+            : "rgba(255,255,255,0.08)";
+
 
     ctx.lineWidth =
-        1;
+        isMobile
+            ? 1.5
+            : 1;
+
 
     ctx.stroke();
 
@@ -1466,10 +1602,6 @@ function drawHistoricalSky(
                 );
 
 
-            /*
-                Only show stars above the horizon.
-            */
-
             if (
                 horizontal.altitude <= 0
             ) {
@@ -1505,66 +1637,137 @@ function drawHistoricalSky(
                 );
 
 
-            const brightness =
-                getStarBrightness(
+            const visual =
+                getStarVisualSettings(
                     magnitude
                 );
 
 
-            /*
-                Make brighter stars larger.
-            */
+            /* -------------------------------------------------
+               SOFT OUTER GLOW
+            ------------------------------------------------- */
 
-            const radiusStar =
-                Math.max(
-                    0.6,
-                    Math.min(
-                        3.2,
-                        0.6 +
-                        brightness * 2.1
-                    )
+            if (
+                visual.glow > 0
+            ) {
+
+                ctx.beginPath();
+
+
+                ctx.arc(
+                    projected.x,
+                    projected.y,
+                    visual.radius,
+                    0,
+                    Math.PI * 2
                 );
 
 
+                ctx.fillStyle =
+                    `rgba(255,238,180,${Math.min(
+                        0.35,
+                        visual.brightness * 0.28
+                    )})`;
+
+
+                ctx.shadowBlur =
+                    visual.glow;
+
+
+                ctx.shadowColor =
+                    "rgba(255,230,150,0.95)";
+
+
+                ctx.fill();
+
+            }
+
+
+            /* -------------------------------------------------
+               STAR CORE
+
+               Mobile gets a stronger white core so
+               the star doesn't disappear into the glow.
+            ------------------------------------------------- */
+
             ctx.beginPath();
 
-            ctx.arc(
 
+            ctx.arc(
                 projected.x,
                 projected.y,
-
-                radiusStar,
-
+                visual.radius,
                 0,
                 Math.PI * 2
-
             );
 
 
-            ctx.fillStyle =
-               `rgba(255,248,220,${Math.min(
-                  1,
-                  window.innerWidth <= 600
-                  ? 0.45 + brightness * 0.16
-                  : 0.35 + brightness * 0.14
-               )})`;
-           
-           ctx.shadowBlur =
-              window.innerWidth <= 600
-              ? brightness * 3
-              : brightness * 2;
+            if (isMobile) {
+
+                ctx.fillStyle =
+                    `rgba(255,252,235,${visual.alpha})`;
+
+            }
+            else {
+
+                ctx.fillStyle =
+                    `rgba(255,248,220,${visual.alpha})`;
+
+            }
+
+
+            ctx.shadowBlur =
+                visual.glow;
+
 
             ctx.shadowColor =
-                "rgba(255,235,170,0.9)";
+                "rgba(255,235,170,0.95)";
 
 
             ctx.fill();
+
+
+            /* -------------------------------------------------
+               EXTRA WHITE PINPOINT FOR BRIGHT STARS
+            ------------------------------------------------- */
+
+            if (
+                visual.brightness > 0.42
+            ) {
+
+                ctx.beginPath();
+
+
+                ctx.arc(
+                    projected.x,
+                    projected.y,
+                    Math.max(
+                        0.55,
+                        visual.radius * 0.32
+                    ),
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fillStyle =
+                    "rgba(255,255,255,0.95)";
+
+
+                ctx.shadowBlur =
+                    0;
+
+
+                ctx.fill();
+
+            }
 
         }
     );
 
 
-    ctx.shadowBlur = 0;
+    ctx.shadowBlur =
+        0;
 
 
     /* -----------------------------------------------------
@@ -1598,7 +1801,8 @@ function drawHistoricalSky(
     );
 
 
-    ctx.shadowBlur = 0;
+    ctx.shadowBlur =
+        0;
 }
 
 
@@ -1638,16 +1842,28 @@ function drawCompassLabels(
     ];
 
 
+    const isMobile =
+        width <= 600;
+
+
     ctx.save();
 
+
     ctx.font =
-        "12px Georgia";
+        isMobile
+            ? "14px Georgia"
+            : "12px Georgia";
+
 
     ctx.fillStyle =
-        "rgba(255,255,255,0.35)";
+        isMobile
+            ? "rgba(255,255,255,0.55)"
+            : "rgba(255,255,255,0.35)";
+
 
     ctx.textAlign =
         "center";
+
 
     ctx.textBaseline =
         "middle";
@@ -1665,13 +1881,21 @@ function drawCompassLabels(
             const x =
                 width / 2 +
                 Math.sin(angle) *
-                (radius + 18);
+                (radius + (
+                    isMobile
+                        ? 22
+                        : 18
+                ));
 
 
             const y =
                 height / 2 -
                 Math.cos(angle) *
-                (radius + 18);
+                (radius + (
+                    isMobile
+                        ? 22
+                        : 18
+                ));
 
 
             ctx.fillText(
@@ -1733,6 +1957,7 @@ function getLinePair(line) {
             line.a ??
             line[0];
 
+
         const b =
             line.hip2 ??
             line.HIP2 ??
@@ -1770,6 +1995,7 @@ function drawRealConstellationLines(
     const stars =
         window.HIP_STARS || [];
 
+
     const lines =
         window.HIP_CONSTELLATION_LINES || [];
 
@@ -1787,11 +2013,6 @@ function drawRealConstellationLines(
         new Map();
 
 
-    /*
-        Calculate the screen position of every star
-        that can be used by a constellation line.
-    */
-
     const jd =
         julianDate(
             targetDate
@@ -1803,6 +2024,7 @@ function drawRealConstellationLines(
 
             const id =
                 getStarId(star);
+
 
             if (!id) {
                 return;
@@ -1859,6 +2081,7 @@ function drawRealConstellationLines(
                     id,
                     projected
                 );
+
             }
 
         }
@@ -1867,31 +2090,43 @@ function drawRealConstellationLines(
 
     ctx.save();
 
-    const isMobile =
-    window.innerWidth <= 600;
 
-   ctx.strokeStyle = 
-      isMobile
-           ? "rgba(255,235,150,0.9)"
-           : "rgba(255,240,170,0.55)";
-   
-   ctx.lineWidth =
-       isMobile
-           ? 1.8
-           : 1;
+    const isMobile =
+        width <= 600;
+
+
+    ctx.strokeStyle =
+        isMobile
+
+            ? "rgba(255,235,150,0.72)"
+
+            : "rgba(255,240,170,0.55)";
+
+
+    ctx.lineWidth =
+        isMobile
+            ? 1.5
+            : 1;
+
 
     ctx.shadowBlur =
-        4;
+        isMobile
+            ? 5
+            : 4;
+
 
     ctx.shadowColor =
-        "rgba(120,160,255,0.25)";
+        "rgba(120,160,255,0.3)";
 
 
     lines.forEach(
         line => {
 
             const pair =
-                getLinePair(line);
+                getLinePair(
+                    line
+                );
+
 
             if (!pair) {
                 return;
@@ -1902,6 +2137,7 @@ function drawRealConstellationLines(
                 starPositions.get(
                     pair[0]
                 );
+
 
             const b =
                 starPositions.get(
@@ -1916,15 +2152,18 @@ function drawRealConstellationLines(
 
             ctx.beginPath();
 
+
             ctx.moveTo(
                 a.x,
                 a.y
             );
 
+
             ctx.lineTo(
                 b.x,
                 b.y
             );
+
 
             ctx.stroke();
 
@@ -1954,18 +2193,44 @@ function drawMemoryConstellation(
         ];
 
 
+    const isMobile =
+        width <= 600;
+
+
     const startX =
-        width * 0.25;
+        width *
+        (
+            isMobile
+                ? 0.20
+                : 0.25
+        );
+
 
     const startY =
-        height * 0.35;
+        height *
+        (
+            isMobile
+                ? 0.32
+                : 0.35
+        );
 
 
     const scaleX =
-        width * 0.006;
+        width *
+        (
+            isMobile
+                ? 0.007
+                : 0.006
+        );
+
 
     const scaleY =
-        height * 0.006;
+        height *
+        (
+            isMobile
+                ? 0.007
+                : 0.006
+        );
 
 
     const points =
@@ -1993,17 +2258,22 @@ function drawMemoryConstellation(
     ctx.save();
 
 
-    /*
-        Lines
-    */
+    /* -----------------------------------------------------
+       LINES
+    ----------------------------------------------------- */
 
     ctx.beginPath();
 
 
     points.forEach(
-        (point, index) => {
+        (
+            point,
+            index
+        ) => {
 
-            if (index === 0) {
+            if (
+                index === 0
+            ) {
 
                 ctx.moveTo(
                     point.x,
@@ -2025,49 +2295,66 @@ function drawMemoryConstellation(
 
 
     ctx.strokeStyle =
-        "rgba(255,240,170,0.55)";
+        isMobile
+            ? "rgba(255,240,170,0.7)"
+            : "rgba(255,240,170,0.55)";
+
 
     ctx.lineWidth =
-        1;
+        isMobile
+            ? 1.5
+            : 1;
+
 
     ctx.shadowBlur =
-        8;
+        isMobile
+            ? 10
+            : 8;
+
 
     ctx.shadowColor =
-        "rgba(255,220,120,0.45)";
+        "rgba(255,220,120,0.55)";
+
 
     ctx.stroke();
 
 
-    /*
-        Memory constellation stars
-    */
+    /* -----------------------------------------------------
+       MEMORY CONSTELLATION STARS
+    ----------------------------------------------------- */
 
     points.forEach(
         point => {
 
             ctx.beginPath();
 
+
             ctx.arc(
-               point.x,
-               point.y,
-               window.innerWidth <= 600
-                  ? 4.5
-                  : 3,
-               0,
-               Math.PI * 2
+                point.x,
+                point.y,
+
+                isMobile
+                    ? 5
+                    : 3,
+
+                0,
+                Math.PI * 2
             );
+
 
             ctx.fillStyle =
                 "#fff8d5";
 
+
             ctx.shadowBlur =
-               window.innerWidth <= 600
-                  ? 25
-                  : 15;
+                isMobile
+                    ? 25
+                    : 15;
+
 
             ctx.shadowColor =
                 "rgba(255,220,120,1)";
+
 
             ctx.fill();
 
@@ -2126,7 +2413,10 @@ function formatSkyTime(
 
 
     let hour =
-        Number(hourString);
+        Number(
+            hourString
+        );
+
 
     const minute =
         minuteString;
@@ -2179,10 +2469,6 @@ window.addEventListener(
             )
         ) {
 
-            /*
-                Find the memory currently being shown.
-            */
-
             const visibleDate =
                 historicalSkyDate.textContent;
 
@@ -2204,6 +2490,7 @@ window.addEventListener(
                                 item.skyDate
                             )
                         );
+
                     }
                 );
 
@@ -2213,7 +2500,9 @@ window.addEventListener(
                 drawHistoricalSky(
                     memory
                 );
+
             }
+
         }
 
     }
@@ -2232,8 +2521,10 @@ function showSpecialSky(
     specialTitle.textContent =
         title;
 
+
     specialText.textContent =
         text;
+
 
     specialSky.classList.add(
         "visible"
@@ -2263,9 +2554,11 @@ startButton.addEventListener(
 
         gameStarted = true;
 
+
         intro.classList.add(
             "hidden"
         );
+
 
         counter.classList.add(
             "visible"
@@ -2325,7 +2618,8 @@ function beginFinalReveal() {
 
             const distance =
                 15 +
-                Math.random() * 18;
+                Math.random() *
+                18;
 
 
             const newX =
@@ -2343,14 +2637,18 @@ function beginFinalReveal() {
             star.style.left =
                 newX + "%";
 
+
             star.style.top =
                 newY + "%";
+
 
             star.style.opacity =
                 "0.25";
 
+
             star.style.transform =
                 "scale(.6)";
+
 
             star.style.pointerEvents =
                 "none";
@@ -2521,6 +2819,7 @@ function createLauraConstellation() {
                     "div"
                 );
 
+
             star.className =
                 "final-star";
 
@@ -2530,6 +2829,7 @@ function createLauraConstellation() {
                     5 +
                     Math.random() * 90
                 ) + "%";
+
 
             star.style.top =
                 (
@@ -2555,9 +2855,11 @@ function createLauraConstellation() {
                         coordinate[0] +
                         "%";
 
+
                     star.style.top =
                         coordinate[1] +
                         "%";
+
 
                     star.classList.add(
                         "arrived"
@@ -2615,6 +2917,7 @@ function drawLauraLines(
                 stars[
                     connection[0]
                 ];
+
 
             const starB =
                 stars[
@@ -2680,6 +2983,7 @@ function drawLineBetween(
     const rectA =
         starA.getBoundingClientRect();
 
+
     const rectB =
         starB.getBoundingClientRect();
 
@@ -2688,13 +2992,16 @@ function drawLineBetween(
         rectA.left +
         rectA.width / 2;
 
+
     const y1 =
         rectA.top +
         rectA.height / 2;
 
+
     const x2 =
         rectB.left +
         rectB.width / 2;
+
 
     const y2 =
         rectB.top +
@@ -2702,10 +3009,13 @@ function drawLineBetween(
 
 
     const dx =
-        x2 - x1;
+        x2 -
+        x1;
+
 
     const dy =
-        y2 - y1;
+        y2 -
+        y1;
 
 
     const distance =
@@ -2729,18 +3039,24 @@ function drawLineBetween(
             "div"
         );
 
+
     line.className =
         "final-line";
 
 
     line.style.left =
-        x1 + "px";
+        x1 +
+        "px";
+
 
     line.style.top =
-        y1 + "px";
+        y1 +
+        "px";
+
 
     line.style.width =
-        distance + "px";
+        distance +
+        "px";
 
 
     line.style.transform =
