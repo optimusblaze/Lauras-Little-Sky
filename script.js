@@ -80,6 +80,18 @@ const closeHistoricalSky =
 
 
 /* =========================================================
+   SAFETY CHECK
+========================================================= */
+
+if (!historicalSkyCanvas) {
+
+    console.error(
+        "Historical sky canvas was not found."
+    );
+}
+
+
+/* =========================================================
    COUNTER
 ========================================================= */
 
@@ -428,6 +440,7 @@ function createMemoryStars() {
         document.body.appendChild(star);
 
         memoryStars.push(star);
+
     });
 }
 
@@ -446,40 +459,43 @@ function discoverStar(index, star) {
         return;
     }
 
-    // If this star has already been discovered,
-    // simply reopen its memory instead of counting it again.
+
     if (discoveredStars.has(index)) {
 
-        showMemory(memories[index]);
+        showMemory(
+            memories[index]
+        );
 
-        // If this memory has a historical sky,
-        // allow her to view that again too.
         if (memories[index].skyDate) {
+
             setTimeout(() => {
+
                 showHistoricalSky(
                     memories[index].skyDate,
                     index
                 );
+
             }, 700);
         }
 
         return;
     }
 
-    // -----------------------------------------------------
-    // FIRST TIME DISCOVERING THIS STAR
-    // -----------------------------------------------------
 
     discoveredStars.add(index);
 
     foundStars++;
 
-    foundCount.textContent = foundStars;
+    foundCount.textContent =
+        foundStars;
 
-    // Make the discovered star glow
-    star.classList.add("discovered");
 
-    star.style.transform = "scale(2.6)";
+    star.classList.add(
+        "discovered"
+    );
+
+    star.style.transform =
+        "scale(2.6)";
 
     star.style.boxShadow =
         "0 0 12px rgba(255,255,255,1), " +
@@ -487,12 +503,11 @@ function discoverStar(index, star) {
         "0 0 60px rgba(255,210,80,.9), " +
         "0 0 90px rgba(255,210,80,.5)";
 
-    // Show the memory
-    showMemory(memories[index]);
 
-    // -----------------------------------------------------
-    // SHOW HISTORICAL SKY WHERE DATE EXISTS
-    // -----------------------------------------------------
+    showMemory(
+        memories[index]
+    );
+
 
     if (memories[index].skyDate) {
 
@@ -504,17 +519,16 @@ function discoverStar(index, star) {
             );
 
         }, 700);
+
     }
 
-    // -----------------------------------------------------
-    // LAST STAR
-    // -----------------------------------------------------
 
     if (foundStars === TOTAL_STARS) {
 
         setTimeout(() => {
 
             closeMemoryPanel();
+
             closeHistoricalSkyPanel();
 
             setTimeout(
@@ -525,6 +539,7 @@ function discoverStar(index, star) {
         }, 3000);
     }
 }
+
 
 /* =========================================================
    SHOW MEMORY
@@ -626,7 +641,10 @@ async function loadHistoricalSkyData() {
    SHOW HISTORICAL SKY
 ========================================================= */
 
-function showHistoricalSky(date, memoryIndex) {
+function showHistoricalSky(
+    date,
+    memoryIndex
+) {
 
     historicalSkyTitle.textContent =
         "The sky above us";
@@ -634,13 +652,24 @@ function showHistoricalSky(date, memoryIndex) {
     historicalSkyDate.textContent =
         date;
 
+
     historicalSky.classList.add(
         "visible"
     );
 
-    drawHistoricalSky(
-        memoryIndex
-    );
+
+    /*
+        Wait one animation frame so the
+        canvas has definitely become visible.
+    */
+
+    requestAnimationFrame(() => {
+
+        drawHistoricalSky(
+            memoryIndex
+        );
+
+    });
 }
 
 
@@ -653,29 +682,78 @@ function drawHistoricalSky(memoryIndex) {
     const canvas =
         historicalSkyCanvas;
 
+    if (!canvas) {
+
+        console.error(
+            "Historical sky canvas not found."
+        );
+
+        return;
+    }
+
+
     const ctx =
         canvas.getContext("2d");
 
-    const width =
-        canvas.width =
-        window.innerWidth *
-        window.devicePixelRatio;
+    if (!ctx) {
 
-    const height =
-        canvas.height =
-        window.innerHeight *
-        window.devicePixelRatio;
+        console.error(
+            "Could not get 2D canvas context."
+        );
 
-    ctx.scale(
-        window.devicePixelRatio,
-        window.devicePixelRatio
-    );
+        return;
+    }
+
+
+    const dpr =
+        window.devicePixelRatio || 1;
 
     const screenWidth =
         window.innerWidth;
 
     const screenHeight =
         window.innerHeight;
+
+
+    /* -----------------------------------------------------
+       CANVAS SETUP
+    ----------------------------------------------------- */
+
+    canvas.style.width =
+        screenWidth + "px";
+
+    canvas.style.height =
+        screenHeight + "px";
+
+
+    canvas.width =
+        screenWidth * dpr;
+
+    canvas.height =
+        screenHeight * dpr;
+
+
+    /*
+        Reset previous transformations.
+
+        This is important because drawHistoricalSky()
+        can be called more than once.
+    */
+
+    ctx.setTransform(
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+    );
+
+
+    ctx.scale(
+        dpr,
+        dpr
+    );
 
 
     /* -----------------------------------------------------
@@ -692,6 +770,7 @@ function drawHistoricalSky(memoryIndex) {
             screenWidth
         );
 
+
     gradient.addColorStop(
         0,
         "rgba(25,45,90,0.85)"
@@ -702,8 +781,10 @@ function drawHistoricalSky(memoryIndex) {
         "rgba(2,5,18,0.98)"
     );
 
+
     ctx.fillStyle =
         gradient;
+
 
     ctx.fillRect(
         0,
@@ -714,120 +795,152 @@ function drawHistoricalSky(memoryIndex) {
 
 
     /* -----------------------------------------------------
-       USE REAL HIPPARCOS STAR DATA
+       REAL HIPPARCOS STARS
     ----------------------------------------------------- */
 
     const stars =
         window.HIP_STARS || [];
 
 
-    if (stars.length > 0) {
-
-        stars.forEach(star => {
-
-            const ra =
-                Number(
-                    star.ra ??
-                    star.RA ??
-                    star.right_ascension ??
-                    0
-                );
-
-            const dec =
-                Number(
-                    star.dec ??
-                    star.DEC ??
-                    star.declination ??
-                    0
-                );
-
-            const magnitude =
-                Number(
-                    star.mag ??
-                    star.magnitude ??
-                    star.vmag ??
-                    5
-                );
-
-            if (
-                !Number.isFinite(ra) ||
-                !Number.isFinite(dec)
-            ) {
-                return;
-            }
+    console.log(
+        "Drawing historical stars:",
+        stars.length
+    );
 
 
-            /*
-                Convert RA / DEC into a simple
-                celestial projection.
+    stars.forEach(star => {
 
-                This preserves the actual
-                star positions contained
-                in the JSON data.
-            */
-
-            const x =
-                (
-                    ((ra % 24) / 24) *
-                    screenWidth
-                );
-
-            const y =
-                (
-                    (90 - dec) /
-                    180 *
-                    screenHeight
-                );
-
-
-            const brightness =
-                Math.max(
-                    0.7,
-                    Math.min(
-                        4,
-                        5.5 - magnitude
-                    )
-                );
-
-            const radius =
-                Math.max(
-                    0.45,
-                    brightness * 0.45
-                );
-
-
-            ctx.beginPath();
-
-            ctx.arc(
-                x,
-                y,
-                radius,
-                0,
-                Math.PI * 2
+        const ra =
+            Number(
+                star.ra ??
+                star.RA ??
+                star.right_ascension ??
+                0
             );
 
-            ctx.fillStyle =
-                `rgba(255,248,220,${Math.min(
-                    1,
-                    0.35 +
-                    brightness * 0.14
-                )})`;
 
-            ctx.shadowBlur =
-                brightness * 2;
+        const dec =
+            Number(
+                star.dec ??
+                star.DEC ??
+                star.declination ??
+                0
+            );
 
-            ctx.shadowColor =
-                "rgba(255,235,170,0.8)";
 
-            ctx.fill();
+        const magnitude =
+            Number(
+                star.mag ??
+                star.magnitude ??
+                star.vmag ??
+                5
+            );
 
-        });
 
-    }
+        if (
+            !Number.isFinite(ra) ||
+            !Number.isFinite(dec)
+        ) {
+
+            return;
+        }
+
+
+        /*
+            RA is normally 0–24 hours.
+        */
+
+        const normalisedRA =
+            ((ra % 24) + 24) % 24;
+
+
+        const x =
+            (normalisedRA / 24) *
+            screenWidth;
+
+
+        /*
+            DEC is normally -90 to +90.
+        */
+
+        const y =
+            ((90 - dec) / 180) *
+            screenHeight;
+
+
+        const brightness =
+            Math.max(
+                0.7,
+                Math.min(
+                    4,
+                    5.5 - magnitude
+                )
+            );
+
+
+        const radius =
+            Math.max(
+                0.5,
+                brightness * 0.45
+            );
+
+
+        ctx.beginPath();
+
+
+        ctx.arc(
+            x,
+            y,
+            radius,
+            0,
+            Math.PI * 2
+        );
+
+
+        ctx.fillStyle =
+            `rgba(
+                255,
+                248,
+                220,
+                ${Math.min(
+                1,
+                0.35 +
+                brightness * 0.14
+            )}
+            )`;
+
+
+        ctx.shadowBlur =
+            brightness * 2;
+
+
+        ctx.shadowColor =
+            "rgba(255,235,170,0.8)";
+
+
+        ctx.fill();
+
+    });
+
+
+    ctx.shadowBlur = 0;
 
 
     /* -----------------------------------------------------
-       DRAW ONE OF 30 UNIQUE MEMORY CONSTELLATIONS
+       REAL CONSTELLATION CONNECTIONS
+    ----------------------------------------------------- */
+
+    drawHistoricalConstellations(
+        ctx,
+        stars,
+        window.HIP_CONSTELLATION_LINES,
+        screenWidth,
+        screenHeight
+    );
+
+
+    /* -----------------------------------------------------
+       MEMORY CONSTELLATION
     ----------------------------------------------------- */
 
     drawMemoryConstellation(
@@ -839,6 +952,307 @@ function drawHistoricalSky(memoryIndex) {
 
 
     ctx.shadowBlur = 0;
+}
+
+
+/* =========================================================
+   DRAW REAL HISTORICAL CONSTELLATIONS
+========================================================= */
+
+function drawHistoricalConstellations(
+    ctx,
+    stars,
+    lines,
+    width,
+    height
+) {
+
+    if (
+        !Array.isArray(stars) ||
+        !Array.isArray(lines)
+    ) {
+
+        return;
+    }
+
+
+    console.log(
+        "Drawing constellation connections:",
+        lines.length
+    );
+
+
+    /*
+        Create a lookup table using several
+        possible HIP identifier names.
+    */
+
+    const starMap =
+        new Map();
+
+
+    stars.forEach(star => {
+
+        const possibleIds = [
+
+            star.hip,
+            star.HIP,
+            star.hip_id,
+            star.HIP_ID,
+            star.id,
+            star.ID,
+            star.catalog_id
+
+        ];
+
+
+        possibleIds.forEach(id => {
+
+            if (
+                id !== undefined &&
+                id !== null
+            ) {
+
+                starMap.set(
+                    String(id),
+                    star
+                );
+
+            }
+
+        });
+
+    });
+
+
+    let drawnLines = 0;
+
+
+    lines.forEach(connection => {
+
+        let idA = null;
+        let idB = null;
+
+
+        /*
+            Format:
+
+                [123, 456]
+        */
+
+        if (
+            Array.isArray(connection)
+        ) {
+
+            idA =
+                connection[0];
+
+            idB =
+                connection[1];
+
+        }
+
+
+        /*
+            Format:
+
+                {
+                    a: 123,
+                    b: 456
+                }
+        */
+
+        else if (
+            connection &&
+            typeof connection === "object"
+        ) {
+
+            idA =
+                connection.a ??
+                connection.from ??
+                connection.start ??
+                connection.star1 ??
+                connection.hip1 ??
+                connection.HIP1 ??
+                connection.id1;
+
+
+            idB =
+                connection.b ??
+                connection.to ??
+                connection.end ??
+                connection.star2 ??
+                connection.hip2 ??
+                connection.HIP2 ??
+                connection.id2;
+
+        }
+
+
+        if (
+            idA === null ||
+            idB === null ||
+            idA === undefined ||
+            idB === undefined
+        ) {
+
+            return;
+        }
+
+
+        const starA =
+            starMap.get(
+                String(idA)
+            );
+
+
+        const starB =
+            starMap.get(
+                String(idB)
+            );
+
+
+        if (
+            !starA ||
+            !starB
+        ) {
+
+            return;
+        }
+
+
+        const raA =
+            Number(
+                starA.ra ??
+                starA.RA ??
+                starA.right_ascension
+            );
+
+
+        const decA =
+            Number(
+                starA.dec ??
+                starA.DEC ??
+                starA.declination
+            );
+
+
+        const raB =
+            Number(
+                starB.ra ??
+                starB.RA ??
+                starB.right_ascension
+            );
+
+
+        const decB =
+            Number(
+                starB.dec ??
+                starB.DEC ??
+                starB.declination
+            );
+
+
+        if (
+            !Number.isFinite(raA) ||
+            !Number.isFinite(decA) ||
+            !Number.isFinite(raB) ||
+            !Number.isFinite(decB)
+        ) {
+
+            return;
+        }
+
+
+        const normalisedRAA =
+            ((raA % 24) + 24) % 24;
+
+
+        const normalisedRAB =
+            ((raB % 24) + 24) % 24;
+
+
+        const x1 =
+            (normalisedRAA / 24) *
+            width;
+
+
+        const y1 =
+            ((90 - decA) / 180) *
+            height;
+
+
+        const x2 =
+            (normalisedRAB / 24) *
+            width;
+
+
+        const y2 =
+            ((90 - decB) / 180) *
+            height;
+
+
+        /*
+            Avoid drawing a huge line across
+            the entire screen when a constellation
+            crosses the 0h/24h boundary.
+        */
+
+        if (
+            Math.abs(x2 - x1) >
+            width * 0.5
+        ) {
+
+            return;
+        }
+
+
+        ctx.beginPath();
+
+
+        ctx.moveTo(
+            x1,
+            y1
+        );
+
+
+        ctx.lineTo(
+            x2,
+            y2
+        );
+
+
+        ctx.strokeStyle =
+            "rgba(160,190,255,0.30)";
+
+
+        ctx.lineWidth =
+            0.7;
+
+
+        ctx.shadowBlur =
+            3;
+
+
+        ctx.shadowColor =
+            "rgba(120,160,255,0.3)";
+
+
+        ctx.stroke();
+
+
+        drawnLines++;
+
+    });
+
+
+    ctx.shadowBlur = 0;
+
+
+    console.log(
+        "Historical constellation lines actually drawn:",
+        drawnLines
+    );
 }
 
 
@@ -859,14 +1273,18 @@ function drawMemoryConstellation(
         memoryConstellations.length
         ];
 
+
     const startX =
         width * 0.25;
+
 
     const startY =
         height * 0.35;
 
+
     const scaleX =
         width * 0.006;
+
 
     const scaleY =
         height * 0.006;
@@ -876,6 +1294,7 @@ function drawMemoryConstellation(
         pattern.map(point => {
 
             return {
+
                 x:
                     startX +
                     point[0] *
@@ -885,6 +1304,7 @@ function drawMemoryConstellation(
                     startY +
                     point[1] *
                     scaleY
+
             };
 
         });
@@ -896,38 +1316,46 @@ function drawMemoryConstellation(
 
     ctx.beginPath();
 
-    points.forEach((point, index) => {
 
-        if (index === 0) {
+    points.forEach(
+        (point, index) => {
 
-            ctx.moveTo(
-                point.x,
-                point.y
-            );
+            if (index === 0) {
+
+                ctx.moveTo(
+                    point.x,
+                    point.y
+                );
+
+            }
+            else {
+
+                ctx.lineTo(
+                    point.x,
+                    point.y
+                );
+
+            }
 
         }
-        else {
+    );
 
-            ctx.lineTo(
-                point.x,
-                point.y
-            );
-
-        }
-
-    });
 
     ctx.strokeStyle =
         "rgba(255,240,170,0.55)";
 
+
     ctx.lineWidth =
         1;
+
 
     ctx.shadowBlur =
         8;
 
+
     ctx.shadowColor =
         "rgba(255,220,120,0.45)";
+
 
     ctx.stroke();
 
@@ -940,6 +1368,7 @@ function drawMemoryConstellation(
 
         ctx.beginPath();
 
+
         ctx.arc(
             point.x,
             point.y,
@@ -948,14 +1377,18 @@ function drawMemoryConstellation(
             Math.PI * 2
         );
 
+
         ctx.fillStyle =
             "#fff8d5";
+
 
         ctx.shadowBlur =
             15;
 
+
         ctx.shadowColor =
             "rgba(255,220,120,1)";
+
 
         ctx.fill();
 
@@ -972,6 +1405,7 @@ function closeHistoricalSkyPanel() {
     historicalSky.classList.remove(
         "visible"
     );
+
 }
 
 closeHistoricalSky.addEventListener(
@@ -984,7 +1418,10 @@ closeHistoricalSky.addEventListener(
    SPECIAL SKY
 ========================================================= */
 
-function showSpecialSky(title, text) {
+function showSpecialSky(
+    title,
+    text
+) {
 
     specialTitle.textContent =
         title;
@@ -996,6 +1433,7 @@ function showSpecialSky(title, text) {
         "visible"
     );
 }
+
 
 closeSky.addEventListener(
     "click",
@@ -1019,9 +1457,11 @@ startButton.addEventListener(
 
         gameStarted = true;
 
+
         intro.classList.add(
             "hidden"
         );
+
 
         counter.classList.add(
             "visible"
@@ -1052,6 +1492,7 @@ function beginFinalReveal() {
         return;
     }
 
+
     finalRevealStarted = true;
 
 
@@ -1071,31 +1512,39 @@ function beginFinalReveal() {
                 Math.PI *
                 2;
 
+
             const distance =
                 15 +
                 Math.random() * 18;
+
 
             const newX =
                 50 +
                 Math.cos(angle) *
                 distance;
 
+
             const newY =
                 50 +
                 Math.sin(angle) *
                 distance;
 
+
             star.style.left =
                 newX + "%";
+
 
             star.style.top =
                 newY + "%";
 
+
             star.style.opacity =
                 "0.25";
 
+
             star.style.transform =
                 "scale(.6)";
+
 
             star.style.pointerEvents =
                 "none";
@@ -1115,21 +1564,9 @@ function beginFinalReveal() {
    LAURA CONSTELLATION
 ========================================================= */
 
-/*
-    These are NEW stars.
-    They are deliberately independent
-    from the 30 memory stars.
-
-    The coordinates form:
-
-        L   A   U   R   A
-*/
-
 const lauraCoordinates = [
 
-    /* =========================
-       L
-    ========================= */
+    /* L */
 
     [12, 28],
     [12, 34],
@@ -1139,9 +1576,7 @@ const lauraCoordinates = [
     [18, 52],
 
 
-    /* =========================
-       A
-    ========================= */
+    /* A */
 
     [25, 52],
     [27, 45],
@@ -1151,15 +1586,11 @@ const lauraCoordinates = [
     [35, 45],
     [37, 52],
 
-    /* A crossbar */
-
     [27.5, 43],
     [34.5, 43],
 
 
-    /* =========================
-       U
-    ========================= */
+    /* U */
 
     [44, 28],
     [44, 36],
@@ -1172,9 +1603,7 @@ const lauraCoordinates = [
     [56, 28],
 
 
-    /* =========================
-       R
-    ========================= */
+    /* R */
 
     [63, 52],
     [63, 28],
@@ -1184,15 +1613,11 @@ const lauraCoordinates = [
     [69, 40],
     [63, 40],
 
-    /* R diagonal leg */
-
     [68, 42],
     [73, 52],
 
 
-    /* =========================
-       A
-    ========================= */
+    /* A */
 
     [81, 52],
     [83, 45],
@@ -1202,23 +1627,15 @@ const lauraCoordinates = [
     [91, 45],
     [93, 52],
 
-    /* A crossbar */
-
     [83.5, 43],
     [90.5, 43]
 
 ];
 
 
-/* =========================================================
-   CONSTELLATION CONNECTIONS
-========================================================= */
-
 const lauraConnections = [
 
-    /* =========================
-       L
-    ========================= */
+    /* L */
 
     [0, 1],
     [1, 2],
@@ -1227,9 +1644,7 @@ const lauraConnections = [
     [4, 5],
 
 
-    /* =========================
-       A
-    ========================= */
+    /* A */
 
     [6, 7],
     [7, 8],
@@ -1238,14 +1653,10 @@ const lauraConnections = [
     [10, 11],
     [11, 12],
 
-    /* Crossbar */
-
     [13, 14],
 
 
-    /* =========================
-       U
-    ========================= */
+    /* U */
 
     [15, 16],
     [16, 17],
@@ -1257,9 +1668,7 @@ const lauraConnections = [
     [22, 23],
 
 
-    /* =========================
-       R
-    ========================= */
+    /* R */
 
     [24, 25],
     [25, 26],
@@ -1268,15 +1677,11 @@ const lauraConnections = [
     [28, 29],
     [29, 30],
 
-    /* Corrected R diagonal */
-
     [29, 31],
     [31, 32],
 
 
-    /* =========================
-       A
-    ========================= */
+    /* A */
 
     [33, 34],
     [34, 35],
@@ -1284,8 +1689,6 @@ const lauraConnections = [
     [36, 37],
     [37, 38],
     [38, 39],
-
-    /* Crossbar */
 
     [40, 41]
 
@@ -1301,24 +1704,16 @@ function createLauraConstellation() {
     const finalStars = [];
 
 
-    /*
-        Create every star at a random
-        location first.
-    */
-
     lauraCoordinates.forEach(
         (coordinate, index) => {
 
             const star =
                 document.createElement("div");
 
+
             star.className =
                 "final-star";
 
-
-            /*
-                Random starting position.
-            */
 
             star.style.left =
                 (
@@ -1326,33 +1721,33 @@ function createLauraConstellation() {
                     Math.random() * 90
                 ) + "%";
 
+
             star.style.top =
                 (
                     5 +
                     Math.random() * 90
                 ) + "%";
 
+
             document.body.appendChild(
                 star
             );
+
 
             finalStars.push(
                 star
             );
 
 
-            /*
-                Slowly move the star
-                into its LAURA position.
-            */
-
             setTimeout(() => {
 
                 star.style.left =
                     coordinate[0] + "%";
 
+
                 star.style.top =
                     coordinate[1] + "%";
+
 
                 star.classList.add(
                     "arrived"
@@ -1364,11 +1759,6 @@ function createLauraConstellation() {
     );
 
 
-    /*
-        Wait for the stars to arrive,
-        then start drawing the lines.
-    */
-
     setTimeout(() => {
 
         drawLauraLines(
@@ -1377,10 +1767,6 @@ function createLauraConstellation() {
 
     }, 3800);
 
-
-    /*
-        Finally reveal the message.
-    */
 
     setTimeout(() => {
 
@@ -1407,20 +1793,21 @@ function drawLauraLines(stars) {
                 connection[0]
                 ];
 
+
             const starB =
                 stars[
                 connection[1]
                 ];
 
-            if (!starA || !starB) {
+
+            if (
+                !starA ||
+                !starB
+            ) {
+
                 return;
             }
 
-
-            /*
-                Draw each line slightly
-                after the previous one.
-            */
 
             setTimeout(() => {
 
@@ -1434,11 +1821,6 @@ function drawLauraLines(stars) {
         }
     );
 
-
-    /*
-        Once all lines are drawn,
-        make the whole name glow.
-    */
 
     setTimeout(() => {
 
@@ -1469,6 +1851,7 @@ function drawLineBetween(
     const rectA =
         starA.getBoundingClientRect();
 
+
     const rectB =
         starB.getBoundingClientRect();
 
@@ -1477,13 +1860,16 @@ function drawLineBetween(
         rectA.left +
         rectA.width / 2;
 
+
     const y1 =
         rectA.top +
         rectA.height / 2;
 
+
     const x2 =
         rectB.left +
         rectB.width / 2;
+
 
     const y2 =
         rectB.top +
@@ -1492,6 +1878,7 @@ function drawLineBetween(
 
     const dx =
         x2 - x1;
+
 
     const dy =
         y2 - y1;
@@ -1518,17 +1905,22 @@ function drawLineBetween(
             "div"
         );
 
+
     line.className =
         "final-line";
+
 
     line.style.left =
         x1 + "px";
 
+
     line.style.top =
         y1 + "px";
 
+
     line.style.width =
         distance + "px";
+
 
     line.style.transform =
         `rotate(${angle}deg)`;
@@ -1539,11 +1931,6 @@ function drawLineBetween(
     );
 
 
-    /*
-        Trigger the CSS opacity
-        transition.
-    */
-
     requestAnimationFrame(() => {
 
         line.classList.add(
@@ -1553,6 +1940,30 @@ function drawLineBetween(
     });
 
 }
+
+
+/* =========================================================
+   RESIZE HISTORICAL SKY
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        if (
+            historicalSky.classList.contains(
+                "visible"
+            )
+        ) {
+
+            drawHistoricalSky(
+                0
+            );
+
+        }
+
+    }
+);
 
 
 /* =========================================================
