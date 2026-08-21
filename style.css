@@ -18,6 +18,7 @@ body {
 }
 
 body {
+
     background:
         radial-gradient(
             circle at 50% 40%,
@@ -43,7 +44,8 @@ body {
 ========================================================= */
 
 #background {
-    position: fixed;
+
+    position: absolute;
 
     inset: 0;
 
@@ -53,6 +55,7 @@ body {
 }
 
 .background-star {
+
     position: absolute;
 
     width: 2px;
@@ -77,16 +80,12 @@ body {
 
     from {
         opacity: 0.15;
-
-        transform:
-            scale(0.7);
+        transform: scale(0.7);
     }
 
     to {
         opacity: 0.85;
-
-        transform:
-            scale(1.4);
+        transform: scale(1.4);
     }
 }
 
@@ -96,7 +95,8 @@ body {
 ========================================================= */
 
 .intro {
-    position: fixed;
+
+    position: absolute;
 
     top: 50%;
     left: 50%;
@@ -117,6 +117,7 @@ body {
 }
 
 .intro.hidden {
+
     opacity: 0;
 
     transform:
@@ -126,6 +127,7 @@ body {
 }
 
 .intro h1 {
+
     font-size:
         clamp(
             2rem,
@@ -135,13 +137,13 @@ body {
 
     font-weight: normal;
 
-    margin:
-        0 0 18px;
+    margin-bottom: 18px;
 
     letter-spacing: 3px;
 }
 
 .intro p {
+
     font-size:
         clamp(
             1rem,
@@ -152,8 +154,6 @@ body {
     line-height: 1.7;
 
     opacity: 0.85;
-
-    margin: 0;
 }
 
 
@@ -162,6 +162,7 @@ body {
 ========================================================= */
 
 .start-button {
+
     margin-top: 25px;
 
     padding:
@@ -169,22 +170,12 @@ body {
 
     border:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.4
-        );
+        rgba(255, 255, 255, 0.4);
 
     border-radius: 30px;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.08
-        );
+        rgba(255, 255, 255, 0.08);
 
     color: white;
 
@@ -199,13 +190,9 @@ body {
 }
 
 .start-button:hover {
+
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.18
-        );
+        rgba(255, 255, 255, 0.18);
 
     transform:
         translateY(-2px);
@@ -217,7 +204,8 @@ body {
 ========================================================= */
 
 .memory-star {
-    position: fixed;
+
+    position: absolute;
 
     width: 10px;
     height: 10px;
@@ -229,31 +217,16 @@ body {
             circle,
             #fff 0%,
             #fff5c7 35%,
-            rgba(
-                255,
-                220,
-                130,
-                0.5
-            ) 65%,
+            rgba(255, 220, 130, 0.5) 65%,
             transparent 100%
         );
 
     box-shadow:
         0 0 8px
-        rgba(
-            255,
-            240,
-            170,
-            0.8
-        ),
+        rgba(255, 240, 170, 0.8),
 
         0 0 18px
-        rgba(
-            255,
-            220,
-            130,
-            0.35
-        );
+        rgba(255, 220, 130, 0.35);
 
     cursor: pointer;
 
@@ -280,6 +253,7 @@ body {
 }
 
 .memory-star.active {
+
     opacity: 1;
 
     pointer-events: auto;
@@ -288,6 +262,7 @@ body {
 @keyframes memoryTwinkle {
 
     from {
+
         transform:
             scale(0.75);
 
@@ -295,6 +270,7 @@ body {
     }
 
     to {
+
         transform:
             scale(1.25);
 
@@ -303,16 +279,18 @@ body {
 }
 
 .memory-star:hover {
+
     transform:
         scale(1.8);
 }
 
 
 /* =========================================================
-   DISCOVERED MEMORY STAR
+   CLICKED MEMORY STAR
 ========================================================= */
 
 .memory-star.discovered {
+
     opacity: 1 !important;
 
     background:
@@ -321,47 +299,23 @@ body {
             #ffffff 0%,
             #fffde8 20%,
             #fff2a8 45%,
-            rgba(
-                255,
-                220,
-                100,
-                0.65
-            ) 70%,
+            rgba(255, 220, 100, 0.65) 70%,
             transparent 100%
         );
 
     box-shadow:
+
         0 0 10px
-        rgba(
-            255,
-            255,
-            255,
-            1
-        ),
+        rgba(255, 255, 255, 1),
 
         0 0 22px
-        rgba(
-            255,
-            240,
-            150,
-            1
-        ),
+        rgba(255, 240, 150, 1),
 
         0 0 45px
-        rgba(
-            255,
-            215,
-            90,
-            0.9
-        ),
+        rgba(255, 215, 90, 0.9),
 
         0 0 75px
-        rgba(
-            255,
-            210,
-            80,
-            0.45
-        );
+        rgba(255, 210, 80, 0.45);
 
     filter:
         brightness(1.7);
@@ -376,7 +330,8 @@ body {
 ========================================================= */
 
 .counter {
-    position: fixed;
+
+    position: absolute;
 
     top: 25px;
     right: 25px;
@@ -389,21 +344,11 @@ body {
     border-radius: 20px;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.07
-        );
+        rgba(255, 255, 255, 0.07);
 
     border:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.12
-        );
+        rgba(255, 255, 255, 0.12);
 
     font-size: 0.85rem;
 
@@ -414,6 +359,7 @@ body {
 }
 
 .counter.visible {
+
     opacity: 0.75;
 }
 
@@ -423,19 +369,14 @@ body {
 ========================================================= */
 
 .memory-panel {
-    position: fixed;
+
+    position: absolute;
 
     left: 50%;
-
     bottom: 9%;
 
     background:
-        rgba(
-            2,
-            5,
-            18,
-            0.5
-        );
+        rgba(2, 5, 18, 0.35);
 
     padding:
         15px 25px;
@@ -460,12 +401,10 @@ body {
     transition:
         opacity 0.6s ease,
         transform 0.6s ease;
-
-    backdrop-filter:
-        blur(5px);
 }
 
 .memory-panel.visible {
+
     opacity: 1;
 
     transform:
@@ -476,6 +415,7 @@ body {
 }
 
 .memory-text {
+
     font-size:
         clamp(
             1.05rem,
@@ -487,15 +427,11 @@ body {
 
     text-shadow:
         0 0 15px
-        rgba(
-            255,
-            255,
-            255,
-            0.2
-        );
+        rgba(255, 255, 255, 0.2);
 }
 
 .close-memory {
+
     margin-top: 15px;
 
     padding:
@@ -503,22 +439,12 @@ body {
 
     border:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.25
-        );
+        rgba(255, 255, 255, 0.25);
 
     border-radius: 20px;
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.05
-        );
+        rgba(255, 255, 255, 0.05);
 
     color: white;
 
@@ -533,46 +459,39 @@ body {
 ========================================================= */
 
 .historical-sky {
-    position: fixed;
+
+    position: absolute;
 
     inset: 0;
 
-    z-index: 100;
+    z-index: 55;
 
-    overflow: hidden;
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
 
     background:
         radial-gradient(
             circle at 50% 45%,
-            rgba(
-                24,
-                43,
-                82,
-                0.96
-            ),
-            rgba(
-                2,
-                5,
-                17,
-                0.99
-            )
+            rgba(24, 43, 82, 0.96),
+            rgba(2, 5, 17, 0.99)
         );
 
     opacity: 0;
 
-    visibility: hidden;
-
     pointer-events: none;
 
     transition:
-        opacity 0.8s ease,
-        visibility 0.8s ease;
+        opacity 0.8s ease;
 }
 
 .historical-sky.visible {
-    opacity: 1;
 
-    visibility: visible;
+    opacity: 1;
 
     pointer-events: auto;
 }
@@ -583,48 +502,36 @@ body {
 ========================================================= */
 
 #historicalSkyCanvas {
+
     position: absolute;
 
     inset: 0;
 
-    display: block;
-
     width: 100%;
     height: 100%;
-
-    z-index: 0;
 
     pointer-events: none;
 }
 
 
 /* =========================================================
-   HISTORICAL SKY CONTENT
+   SKY INFORMATION
 ========================================================= */
 
-.historical-sky-content {
-    position: absolute;
+.sky-overlay {
 
-    inset: 0;
+    position: relative;
 
     z-index: 5;
-
-    display: flex;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
 
     text-align: center;
 
     pointer-events: none;
+
+    margin-top: -8px;
 }
 
 .historical-sky h2 {
-    margin:
-        0 0 5px;
 
     font-size:
         clamp(
@@ -635,54 +542,121 @@ body {
 
     font-weight: normal;
 
+    margin:
+        0 0 5px;
+
     text-shadow:
         0 0 20px
-        rgba(
-            255,
-            255,
-            255,
-            0.3
-        );
+        rgba(255, 255, 255, 0.3);
 }
 
 .historical-sky-date {
+
     font-size: 0.95rem;
 
-    opacity: 0.75;
+    opacity: 0.8;
 
-    margin-bottom: 8px;
+    margin-top: 5px;
 }
 
-.historical-sky-status {
-    font-size: 0.8rem;
+.historical-sky-location {
 
-    opacity: 0.45;
+    font-size: 0.85rem;
 
-    margin-bottom: 5px;
+    opacity: 0.55;
+
+    margin-top: 4px;
 }
+
+
+/* =========================================================
+   SKY HORIZON
+========================================================= */
+
+.sky-horizon {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    width: 78vmin;
+    height: 78vmin;
+
+    transform:
+        translate(-50%, -50%);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius: 50%;
+
+    pointer-events: none;
+
+    z-index: 2;
+
+    box-shadow:
+        0 0 60px
+        rgba(100, 150, 255, 0.04);
+}
+
+
+/* =========================================================
+   SKY CARD / LEGEND
+========================================================= */
+
+.sky-help {
+
+    position: absolute;
+
+    left: 50%;
+
+    bottom: 88px;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 5;
+
+    font-size: 0.72rem;
+
+    opacity: 0.35;
+
+    text-align: center;
+
+    pointer-events: none;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   HISTORICAL SKY CLOSE
+========================================================= */
 
 .historical-sky-close {
-    margin-top: 20px;
+
+    position: absolute;
+
+    bottom: 35px;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 8;
 
     padding:
         9px 20px;
 
     border:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.3
-        );
+        rgba(255, 255, 255, 0.3);
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.07
-        );
+        rgba(255, 255, 255, 0.07);
 
     color: white;
 
@@ -692,24 +666,14 @@ body {
 
     font-family: inherit;
 
-    pointer-events: auto;
-
     transition:
-        background 0.3s ease,
-        transform 0.3s ease;
+        background 0.3s ease;
 }
 
 .historical-sky-close:hover {
-    background:
-        rgba(
-            255,
-            255,
-            255,
-            0.15
-        );
 
-    transform:
-        translateY(-2px);
+    background:
+        rgba(255, 255, 255, 0.15);
 }
 
 
@@ -718,27 +682,18 @@ body {
 ========================================================= */
 
 .special-sky {
-    position: fixed;
+
+    position: absolute;
 
     inset: 0;
 
-    z-index: 110;
+    z-index: 60;
 
     background:
         radial-gradient(
             circle at 50% 35%,
-            rgba(
-                40,
-                65,
-                120,
-                0.85
-            ),
-            rgba(
-                3,
-                7,
-                20,
-                0.97
-            )
+            rgba(40, 65, 120, 0.85),
+            rgba(3, 7, 20, 0.97)
         );
 
     display: flex;
@@ -760,12 +715,14 @@ body {
 }
 
 .special-sky.visible {
+
     opacity: 1;
 
     pointer-events: auto;
 }
 
 .special-sky h2 {
+
     font-size:
         clamp(
             1.8rem,
@@ -779,6 +736,7 @@ body {
 }
 
 .special-sky p {
+
     max-width: 600px;
 
     width: 90%;
@@ -789,6 +747,7 @@ body {
 }
 
 .close-sky {
+
     margin-top: 25px;
 
     padding:
@@ -796,20 +755,10 @@ body {
 
     border:
         1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.3
-        );
+        rgba(255, 255, 255, 0.3);
 
     background:
-        rgba(
-            255,
-            255,
-            255,
-            0.07
-        );
+        rgba(255, 255, 255, 0.07);
 
     color: white;
 
@@ -826,7 +775,8 @@ body {
 ========================================================= */
 
 .final-star {
-    position: fixed;
+
+    position: absolute;
 
     width: 8px;
     height: 8px;
@@ -843,55 +793,33 @@ body {
         );
 
     box-shadow:
+
         0 0 8px
-        rgba(
-            255,
-            245,
-            190,
-            1
-        ),
+        rgba(255, 245, 190, 1),
 
         0 0 18px
-        rgba(
-            255,
-            220,
-            100,
-            0.9
-        ),
+        rgba(255, 220, 100, 0.9),
 
         0 0 35px
-        rgba(
-            255,
-            210,
-            100,
-            0.45
-        );
+        rgba(255, 210, 100, 0.45);
 
     z-index: 30;
 
     opacity: 0;
 
     transition:
+
         left 2.2s
-        cubic-bezier(
-            0.2,
-            0.8,
-            0.2,
-            1
-        ),
+        cubic-bezier(0.2, 0.8, 0.2, 1),
 
         top 2.2s
-        cubic-bezier(
-            0.2,
-            0.8,
-            0.2,
-            1
-        ),
+        cubic-bezier(0.2, 0.8, 0.2, 1),
 
         opacity 1s ease;
 }
 
 .final-star.arrived {
+
     opacity: 1;
 
     animation:
@@ -905,39 +833,27 @@ body {
 @keyframes finalPulse {
 
     from {
+
         transform:
             scale(0.75);
 
         box-shadow:
             0 0 7px
-            rgba(
-                255,
-                245,
-                190,
-                0.8
-            );
+            rgba(255, 245, 190, 0.8);
     }
 
     to {
+
         transform:
             scale(1.3);
 
         box-shadow:
+
             0 0 12px
-            rgba(
-                255,
-                245,
-                190,
-                1
-            ),
+            rgba(255, 245, 190, 1),
 
             0 0 28px
-            rgba(
-                255,
-                220,
-                100,
-                0.9
-            );
+            rgba(255, 220, 100, 0.9);
     }
 }
 
@@ -947,7 +863,8 @@ body {
 ========================================================= */
 
 .final-line {
-    position: fixed;
+
+    position: absolute;
 
     height: 1px;
 
@@ -957,34 +874,14 @@ body {
     background:
         linear-gradient(
             to right,
-            rgba(
-                255,
-                245,
-                200,
-                0
-            ),
-            rgba(
-                255,
-                245,
-                200,
-                0.75
-            ),
-            rgba(
-                255,
-                245,
-                200,
-                0
-            )
+            rgba(255, 245, 200, 0),
+            rgba(255, 245, 200, 0.75),
+            rgba(255, 245, 200, 0)
         );
 
     box-shadow:
         0 0 5px
-        rgba(
-            255,
-            230,
-            150,
-            0.35
-        );
+        rgba(255, 230, 150, 0.35);
 
     z-index: 25;
 
@@ -995,6 +892,7 @@ body {
 }
 
 .final-line.visible {
+
     opacity: 1;
 }
 
@@ -1004,7 +902,8 @@ body {
 ========================================================= */
 
 .final-message {
-    position: fixed;
+
+    position: absolute;
 
     left: 50%;
 
@@ -1015,10 +914,7 @@ body {
         translateY(20px);
 
     width:
-        min(
-            90%,
-            650px
-        );
+        min(90%, 650px);
 
     text-align: center;
 
@@ -1034,6 +930,7 @@ body {
 }
 
 .final-message.visible {
+
     opacity: 1;
 
     transform:
@@ -1042,6 +939,7 @@ body {
 }
 
 .final-message p {
+
     font-size:
         clamp(
             1.1rem,
@@ -1051,11 +949,11 @@ body {
 
     line-height: 1.7;
 
-    margin:
-        8px 0;
+    margin: 8px 0;
 }
 
 .final-message .small {
+
     font-size: 0.9rem;
 
     opacity: 0.65;
@@ -1069,6 +967,7 @@ body {
 ========================================================= */
 
 .name-complete {
+
     animation:
         nameGlow
         4s
@@ -1080,28 +979,20 @@ body {
 @keyframes nameGlow {
 
     from {
+
         filter:
             drop-shadow(
                 0 0 4px
-                rgba(
-                    255,
-                    240,
-                    170,
-                    0.3
-                )
+                rgba(255, 240, 170, 0.3)
             );
     }
 
     to {
+
         filter:
             drop-shadow(
                 0 0 18px
-                rgba(
-                    255,
-                    230,
-                    120,
-                    0.8
-                )
+                rgba(255, 230, 120, 0.8)
             );
     }
 }
@@ -1114,29 +1005,41 @@ body {
 @media (max-width: 600px) {
 
     .memory-star {
+
         width: 8px;
         height: 8px;
     }
 
     .final-star {
+
         width: 7px;
         height: 7px;
     }
 
     .counter {
+
         top: 15px;
         right: 15px;
     }
 
     .final-message {
+
         bottom: 6%;
     }
 
-    .historical-sky h2 {
-        margin-top: -30px;
+    .sky-horizon {
+
+        width: 90vmin;
+        height: 90vmin;
+    }
+
+    .sky-help {
+
+        display: none;
     }
 
     .historical-sky-close {
-        margin-top: 15px;
+
+        bottom: 20px;
     }
 }
