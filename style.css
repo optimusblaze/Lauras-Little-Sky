@@ -10,23 +10,29 @@ html,
 body {
     margin: 0;
     padding: 0;
+
     width: 100%;
     height: 100%;
+
     overflow: hidden;
 }
 
 body {
+
     background:
         radial-gradient(circle at 50% 40%,
             #172347 0%,
             #0c1430 35%,
             #050817 70%,
             #02030b 100%);
+
     color: white;
+
     font-family:
         Georgia,
         "Times New Roman",
         serif;
+
     position: relative;
 }
 
@@ -36,33 +42,51 @@ body {
 ========================================================= */
 
 #background {
+
     position: absolute;
+
     inset: 0;
+
     z-index: 1;
+
     pointer-events: none;
 }
 
 .background-star {
+
     position: absolute;
+
     width: 2px;
     height: 2px;
+
     background: white;
+
     border-radius: 50%;
+
     opacity: 0.5;
+
     animation:
         twinkle var(--duration) ease-in-out infinite alternate;
+
     pointer-events: none;
 }
 
 @keyframes twinkle {
+
     from {
+
         opacity: 0.15;
-        transform: scale(0.7);
+
+        transform:
+            scale(0.7);
     }
 
     to {
+
         opacity: 0.85;
-        transform: scale(1.4);
+
+        transform:
+            scale(1.4);
     }
 }
 
@@ -72,42 +96,60 @@ body {
 ========================================================= */
 
 .intro {
+
     position: absolute;
+
     top: 50%;
     left: 50%;
+
     transform:
         translate(-50%, -50%);
+
     text-align: center;
-    width: min(90%, 600px);
+
+    width:
+        min(90%, 600px);
+
     z-index: 50;
+
     transition:
         opacity 1.2s ease,
         transform 1.2s ease;
 }
 
 .intro.hidden {
+
     opacity: 0;
+
     transform:
         translate(-50%, -55%);
+
     pointer-events: none;
 }
 
 .intro h1 {
+
     font-size:
         clamp(2rem,
             6vw,
             4rem);
+
     font-weight: normal;
+
     margin-bottom: 18px;
+
     letter-spacing: 3px;
 }
 
 .intro p {
+
     font-size:
         clamp(1rem,
             3vw,
             1.25rem);
+
     line-height: 1.7;
+
     opacity: 0.85;
 }
 
@@ -117,25 +159,37 @@ body {
 ========================================================= */
 
 .start-button {
+
     margin-top: 25px;
+
     padding:
         13px 28px;
+
     border:
         1px solid rgba(255, 255, 255, 0.4);
+
     border-radius: 30px;
+
     background:
         rgba(255, 255, 255, 0.08);
+
     color: white;
+
     font-family: inherit;
+
     font-size: 1rem;
+
     cursor: pointer;
+
     transition:
         all 0.3s ease;
 }
 
 .start-button:hover {
+
     background:
         rgba(255, 255, 255, 0.18);
+
     transform:
         translateY(-2px);
 }
@@ -146,9 +200,12 @@ body {
 ========================================================= */
 
 .memory-star {
+
     position: absolute;
+
     width: 10px;
     height: 10px;
+
     border-radius: 50%;
 
     background:
@@ -160,12 +217,15 @@ body {
 
     box-shadow:
         0 0 8px rgba(255, 240, 170, 0.8),
+
         0 0 18px rgba(255, 220, 130, 0.35);
 
     cursor: pointer;
+
     z-index: 20;
 
     opacity: 0;
+
     pointer-events: none;
 
     transition:
@@ -181,23 +241,33 @@ body {
 }
 
 .memory-star.active {
+
     opacity: 1;
+
     pointer-events: auto;
 }
 
 @keyframes memoryTwinkle {
+
     from {
-        transform: scale(0.75);
+
+        transform:
+            scale(0.75);
+
         opacity: 0.65;
     }
 
     to {
-        transform: scale(1.25);
+
+        transform:
+            scale(1.25);
+
         opacity: 1;
     }
 }
 
 .memory-star:hover {
+
     transform:
         scale(1.8);
 }
@@ -208,6 +278,7 @@ body {
 ========================================================= */
 
 .memory-star.discovered {
+
     opacity: 1 !important;
 
     background:
@@ -219,9 +290,13 @@ body {
             transparent 100%);
 
     box-shadow:
+
         0 0 10px rgba(255, 255, 255, 1),
+
         0 0 22px rgba(255, 240, 150, 1),
+
         0 0 45px rgba(255, 215, 90, 0.9),
+
         0 0 75px rgba(255, 210, 80, 0.45);
 
     filter:
@@ -237,24 +312,35 @@ body {
 ========================================================= */
 
 .counter {
+
     position: absolute;
+
     top: 25px;
     right: 25px;
+
     z-index: 40;
+
     padding:
         8px 14px;
+
     border-radius: 20px;
+
     background:
         rgba(255, 255, 255, 0.07);
+
     border:
         1px solid rgba(255, 255, 255, 0.12);
+
     font-size: 0.85rem;
+
     opacity: 0;
+
     transition:
         opacity 0.8s ease;
 }
 
 .counter.visible {
+
     opacity: 0.75;
 }
 
@@ -264,13 +350,18 @@ body {
 ========================================================= */
 
 .memory-panel {
+
     position: absolute;
+
     left: 50%;
     bottom: 9%;
 
-    /* Keeps stars from visually interfering with the memory */
-    background: rgba(2, 5, 18, 0.35);
-    padding: 15px 25px;
+    background:
+        rgba(2, 5, 18, 0.35);
+
+    padding:
+        15px 25px;
+
     border-radius: 20px;
 
     transform:
@@ -280,16 +371,22 @@ body {
         min(90%, 650px);
 
     text-align: center;
+
     z-index: 45;
+
     opacity: 0;
+
     pointer-events: none;
+
     transition:
         opacity 0.6s ease,
         transform 0.6s ease;
 }
 
 .memory-panel.visible {
+
     opacity: 1;
+
     transform:
         translateX(-50%) translateY(0);
 
@@ -297,6 +394,7 @@ body {
 }
 
 .memory-text {
+
     font-size:
         clamp(1.05rem,
             3vw,
@@ -309,7 +407,9 @@ body {
 }
 
 .close-memory {
+
     margin-top: 15px;
+
     padding:
         7px 18px;
 
@@ -322,7 +422,9 @@ body {
         rgba(255, 255, 255, 0.05);
 
     color: white;
+
     cursor: pointer;
+
     font-family: inherit;
 }
 
@@ -332,14 +434,15 @@ body {
 ========================================================= */
 
 .historical-sky {
-    position: absolute;
-    inset: 0;
-    z-index: 55;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: 55;
 
     background:
         radial-gradient(circle at 50% 45%,
@@ -347,6 +450,7 @@ body {
             rgba(2, 5, 17, 0.99));
 
     opacity: 0;
+
     pointer-events: none;
 
     transition:
@@ -354,12 +458,67 @@ body {
 }
 
 .historical-sky.visible {
+
     opacity: 1;
+
     pointer-events: auto;
 }
 
+
+/* =========================================================
+   HISTORICAL SKY CANVAS
+========================================================= */
+
+#historicalSkyCanvas {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    z-index: 1;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   HISTORICAL SKY CONTENT
+========================================================= */
+
+.historical-sky-content {
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: 0;
+    bottom: 0;
+
+    z-index: 5;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    pointer-events: none;
+
+    text-align: center;
+}
+
 .historical-sky h2 {
+
     position: relative;
+
     z-index: 5;
 
     font-size:
@@ -368,34 +527,38 @@ body {
             2.5rem);
 
     font-weight: normal;
+
     margin:
         0 0 5px;
+
+    text-shadow:
+        0 0 20px rgba(0, 0, 0, 0.7);
 }
 
 .historical-sky-date {
+
     position: relative;
+
     z-index: 5;
 
     font-size: 0.95rem;
-    opacity: 0.7;
+
+    opacity: 0.75;
+
     margin-bottom: 15px;
-}
 
-#historicalSkyCanvas {
-    position: absolute;
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    pointer-events: none;
+    text-shadow:
+        0 0 15px rgba(0, 0, 0, 0.7);
 }
 
 .historical-sky-close {
+
     position: relative;
+
     z-index: 5;
 
     margin-top: 20px;
+
     padding:
         9px 20px;
 
@@ -408,8 +571,25 @@ body {
     color: white;
 
     border-radius: 25px;
+
     cursor: pointer;
+
     font-family: inherit;
+
+    pointer-events: auto;
+
+    transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+}
+
+.historical-sky-close:hover {
+
+    background:
+        rgba(255, 255, 255, 0.15);
+
+    transform:
+        translateY(-2px);
 }
 
 
@@ -418,8 +598,11 @@ body {
 ========================================================= */
 
 .special-sky {
+
     position: absolute;
+
     inset: 0;
+
     z-index: 60;
 
     background:
@@ -428,13 +611,17 @@ body {
             rgba(3, 7, 20, 0.97));
 
     display: flex;
+
     flex-direction: column;
+
     align-items: center;
+
     justify-content: center;
 
     text-align: center;
 
     opacity: 0;
+
     pointer-events: none;
 
     transition:
@@ -442,29 +629,39 @@ body {
 }
 
 .special-sky.visible {
+
     opacity: 1;
+
     pointer-events: auto;
 }
 
 .special-sky h2 {
+
     font-size:
         clamp(1.8rem,
             5vw,
             3rem);
 
     font-weight: normal;
+
     margin-bottom: 12px;
 }
 
 .special-sky p {
+
     max-width: 600px;
+
     width: 90%;
+
     line-height: 1.7;
+
     opacity: 0.85;
 }
 
 .close-sky {
+
     margin-top: 25px;
+
     padding:
         10px 22px;
 
@@ -477,7 +674,9 @@ body {
     color: white;
 
     border-radius: 25px;
+
     cursor: pointer;
+
     font-family: inherit;
 }
 
@@ -487,9 +686,12 @@ body {
 ========================================================= */
 
 .final-star {
+
     position: absolute;
+
     width: 8px;
     height: 8px;
+
     border-radius: 50%;
 
     background:
@@ -500,20 +702,28 @@ body {
             transparent 100%);
 
     box-shadow:
+
         0 0 8px rgba(255, 245, 190, 1),
+
         0 0 18px rgba(255, 220, 100, 0.9),
+
         0 0 35px rgba(255, 210, 100, 0.45);
 
     z-index: 30;
+
     opacity: 0;
 
     transition:
+
         left 2.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+
         top 2.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+
         opacity 1s ease;
 }
 
 .final-star.arrived {
+
     opacity: 1;
 
     animation:
@@ -521,7 +731,9 @@ body {
 }
 
 @keyframes finalPulse {
+
     from {
+
         transform:
             scale(0.75);
 
@@ -530,11 +742,14 @@ body {
     }
 
     to {
+
         transform:
             scale(1.3);
 
         box-shadow:
+
             0 0 12px rgba(255, 245, 190, 1),
+
             0 0 28px rgba(255, 220, 100, 0.9);
     }
 }
@@ -545,7 +760,9 @@ body {
 ========================================================= */
 
 .final-line {
+
     position: absolute;
+
     height: 1px;
 
     transform-origin:
@@ -561,6 +778,7 @@ body {
         0 0 5px rgba(255, 230, 150, 0.35);
 
     z-index: 25;
+
     opacity: 0;
 
     transition:
@@ -568,6 +786,7 @@ body {
 }
 
 .final-line.visible {
+
     opacity: 1;
 }
 
@@ -577,7 +796,9 @@ body {
 ========================================================= */
 
 .final-message {
+
     position: absolute;
+
     left: 50%;
     bottom: 8%;
 
@@ -585,10 +806,10 @@ body {
         translateX(-50%) translateY(20px);
 
     width:
-        min(90%,
-            650px);
+        min(90%, 650px);
 
     text-align: center;
+
     z-index: 50;
 
     opacity: 0;
@@ -601,6 +822,7 @@ body {
 }
 
 .final-message.visible {
+
     opacity: 1;
 
     transform:
@@ -608,20 +830,24 @@ body {
 }
 
 .final-message p {
+
     font-size:
         clamp(1.1rem,
             3vw,
             1.5rem);
 
     line-height: 1.7;
+
     margin: 8px 0;
 }
 
 .final-message .small {
+
     font-size:
         0.9rem;
 
     opacity: 0.65;
+
     margin-top: 18px;
 }
 
@@ -631,17 +857,21 @@ body {
 ========================================================= */
 
 .name-complete {
+
     animation:
         nameGlow 4s ease-in-out infinite alternate;
 }
 
 @keyframes nameGlow {
+
     from {
+
         filter:
             drop-shadow(0 0 4px rgba(255, 240, 170, 0.3));
     }
 
     to {
+
         filter:
             drop-shadow(0 0 18px rgba(255, 230, 120, 0.8));
     }
@@ -655,21 +885,43 @@ body {
 @media (max-width: 600px) {
 
     .memory-star {
+
         width: 8px;
         height: 8px;
     }
 
     .final-star {
+
         width: 7px;
         height: 7px;
     }
 
     .counter {
+
         top: 15px;
         right: 15px;
     }
 
     .final-message {
+
         bottom: 6%;
+    }
+
+    .historical-sky h2 {
+
+        font-size:
+            1.7rem;
+    }
+
+    .historical-sky-date {
+
+        font-size:
+            0.85rem;
+    }
+
+    .historical-sky-close {
+
+        padding:
+            8px 17px;
     }
 }
