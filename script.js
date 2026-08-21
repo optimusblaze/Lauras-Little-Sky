@@ -1542,16 +1542,17 @@ function drawHistoricalSky(
 
 
             ctx.fillStyle =
-                `rgba(
-                    255,
-                    248,
-                    220,
-                    ${0.35 + brightness * 0.65}
-                )`;
-
-
-            ctx.shadowBlur =
-                brightness * 7;
+               `rgba(255,248,220,${Math.min(
+                  1,
+                  window.innerWidth <= 600
+                  ? 0.45 + brightness * 0.16
+                  : 0.35 + brightness * 0.14
+               )})`;
+           
+           ctx.shadowBlur =
+              window.innerWidth <= 600
+              ? brightness * 3
+              : brightness * 2;
 
             ctx.shadowColor =
                 "rgba(255,235,170,0.9)";
@@ -1866,11 +1867,18 @@ function drawRealConstellationLines(
 
     ctx.save();
 
-    ctx.strokeStyle =
-        "rgba(150,180,230,0.18)";
+    const isMobile =
+    window.innerWidth <= 600;
 
-    ctx.lineWidth =
-        0.7;
+   ctx.strokeStyle = 
+      isMobile
+           ? "rgba(255,235,150,0.9)"
+           : "rgba(255,240,170,0.55)";
+   
+   ctx.lineWidth =
+       isMobile
+           ? 1.8
+           : 1;
 
     ctx.shadowBlur =
         4;
@@ -2041,18 +2049,22 @@ function drawMemoryConstellation(
             ctx.beginPath();
 
             ctx.arc(
-                point.x,
-                point.y,
-                3,
-                0,
-                Math.PI * 2
+               point.x,
+               point.y,
+               window.innerWidth <= 600
+                  ? 4.5
+                  : 3,
+               0,
+               Math.PI * 2
             );
 
             ctx.fillStyle =
                 "#fff8d5";
 
             ctx.shadowBlur =
-                15;
+               window.innerWidth <= 600
+                  ? 25
+                  : 15;
 
             ctx.shadowColor =
                 "rgba(255,220,120,1)";
