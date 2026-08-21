@@ -18,13 +18,14 @@ body {
 }
 
 body {
-
     background:
-        radial-gradient(circle at 50% 40%,
+        radial-gradient(
+            circle at 50% 40%,
             #172347 0%,
             #0c1430 35%,
             #050817 70%,
-            #02030b 100%);
+            #02030b 100%
+        );
 
     color: white;
 
@@ -42,8 +43,7 @@ body {
 ========================================================= */
 
 #background {
-
-    position: absolute;
+    position: fixed;
 
     inset: 0;
 
@@ -53,7 +53,6 @@ body {
 }
 
 .background-star {
-
     position: absolute;
 
     width: 2px;
@@ -66,7 +65,10 @@ body {
     opacity: 0.5;
 
     animation:
-        twinkle var(--duration) ease-in-out infinite alternate;
+        twinkle var(--duration)
+        ease-in-out
+        infinite
+        alternate;
 
     pointer-events: none;
 }
@@ -74,7 +76,6 @@ body {
 @keyframes twinkle {
 
     from {
-
         opacity: 0.15;
 
         transform:
@@ -82,7 +83,6 @@ body {
     }
 
     to {
-
         opacity: 0.85;
 
         transform:
@@ -96,8 +96,7 @@ body {
 ========================================================= */
 
 .intro {
-
-    position: absolute;
+    position: fixed;
 
     top: 50%;
     left: 50%;
@@ -118,7 +117,6 @@ body {
 }
 
 .intro.hidden {
-
     opacity: 0;
 
     transform:
@@ -128,29 +126,34 @@ body {
 }
 
 .intro h1 {
-
     font-size:
-        clamp(2rem,
+        clamp(
+            2rem,
             6vw,
-            4rem);
+            4rem
+        );
 
     font-weight: normal;
 
-    margin-bottom: 18px;
+    margin:
+        0 0 18px;
 
     letter-spacing: 3px;
 }
 
 .intro p {
-
     font-size:
-        clamp(1rem,
+        clamp(
+            1rem,
             3vw,
-            1.25rem);
+            1.25rem
+        );
 
     line-height: 1.7;
 
     opacity: 0.85;
+
+    margin: 0;
 }
 
 
@@ -159,19 +162,29 @@ body {
 ========================================================= */
 
 .start-button {
-
     margin-top: 25px;
 
     padding:
         13px 28px;
 
     border:
-        1px solid rgba(255, 255, 255, 0.4);
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
 
     border-radius: 30px;
 
     background:
-        rgba(255, 255, 255, 0.08);
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
 
     color: white;
 
@@ -186,9 +199,13 @@ body {
 }
 
 .start-button:hover {
-
     background:
-        rgba(255, 255, 255, 0.18);
+        rgba(
+            255,
+            255,
+            255,
+            0.18
+        );
 
     transform:
         translateY(-2px);
@@ -200,8 +217,7 @@ body {
 ========================================================= */
 
 .memory-star {
-
-    position: absolute;
+    position: fixed;
 
     width: 10px;
     height: 10px;
@@ -209,16 +225,35 @@ body {
     border-radius: 50%;
 
     background:
-        radial-gradient(circle,
+        radial-gradient(
+            circle,
             #fff 0%,
             #fff5c7 35%,
-            rgba(255, 220, 130, 0.5) 65%,
-            transparent 100%);
+            rgba(
+                255,
+                220,
+                130,
+                0.5
+            ) 65%,
+            transparent 100%
+        );
 
     box-shadow:
-        0 0 8px rgba(255, 240, 170, 0.8),
+        0 0 8px
+        rgba(
+            255,
+            240,
+            170,
+            0.8
+        ),
 
-        0 0 18px rgba(255, 220, 130, 0.35);
+        0 0 18px
+        rgba(
+            255,
+            220,
+            130,
+            0.35
+        );
 
     cursor: pointer;
 
@@ -237,11 +272,14 @@ body {
         filter 0.35s ease;
 
     animation:
-        memoryTwinkle 2.5s ease-in-out infinite alternate;
+        memoryTwinkle
+        2.5s
+        ease-in-out
+        infinite
+        alternate;
 }
 
 .memory-star.active {
-
     opacity: 1;
 
     pointer-events: auto;
@@ -250,7 +288,6 @@ body {
 @keyframes memoryTwinkle {
 
     from {
-
         transform:
             scale(0.75);
 
@@ -258,7 +295,6 @@ body {
     }
 
     to {
-
         transform:
             scale(1.25);
 
@@ -267,37 +303,65 @@ body {
 }
 
 .memory-star:hover {
-
     transform:
         scale(1.8);
 }
 
 
 /* =========================================================
-   CLICKED MEMORY STAR
+   DISCOVERED MEMORY STAR
 ========================================================= */
 
 .memory-star.discovered {
-
     opacity: 1 !important;
 
     background:
-        radial-gradient(circle,
+        radial-gradient(
+            circle,
             #ffffff 0%,
             #fffde8 20%,
             #fff2a8 45%,
-            rgba(255, 220, 100, 0.65) 70%,
-            transparent 100%);
+            rgba(
+                255,
+                220,
+                100,
+                0.65
+            ) 70%,
+            transparent 100%
+        );
 
     box-shadow:
+        0 0 10px
+        rgba(
+            255,
+            255,
+            255,
+            1
+        ),
 
-        0 0 10px rgba(255, 255, 255, 1),
+        0 0 22px
+        rgba(
+            255,
+            240,
+            150,
+            1
+        ),
 
-        0 0 22px rgba(255, 240, 150, 1),
+        0 0 45px
+        rgba(
+            255,
+            215,
+            90,
+            0.9
+        ),
 
-        0 0 45px rgba(255, 215, 90, 0.9),
-
-        0 0 75px rgba(255, 210, 80, 0.45);
+        0 0 75px
+        rgba(
+            255,
+            210,
+            80,
+            0.45
+        );
 
     filter:
         brightness(1.7);
@@ -312,8 +376,7 @@ body {
 ========================================================= */
 
 .counter {
-
-    position: absolute;
+    position: fixed;
 
     top: 25px;
     right: 25px;
@@ -326,10 +389,21 @@ body {
     border-radius: 20px;
 
     background:
-        rgba(255, 255, 255, 0.07);
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
 
     border:
-        1px solid rgba(255, 255, 255, 0.12);
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.12
+        );
 
     font-size: 0.85rem;
 
@@ -340,7 +414,6 @@ body {
 }
 
 .counter.visible {
-
     opacity: 0.75;
 }
 
@@ -350,14 +423,19 @@ body {
 ========================================================= */
 
 .memory-panel {
-
-    position: absolute;
+    position: fixed;
 
     left: 50%;
+
     bottom: 9%;
 
     background:
-        rgba(2, 5, 18, 0.35);
+        rgba(
+            2,
+            5,
+            18,
+            0.5
+        );
 
     padding:
         15px 25px;
@@ -365,7 +443,8 @@ body {
     border-radius: 20px;
 
     transform:
-        translateX(-50%) translateY(20px);
+        translateX(-50%)
+        translateY(20px);
 
     width:
         min(90%, 650px);
@@ -381,45 +460,65 @@ body {
     transition:
         opacity 0.6s ease,
         transform 0.6s ease;
+
+    backdrop-filter:
+        blur(5px);
 }
 
 .memory-panel.visible {
-
     opacity: 1;
 
     transform:
-        translateX(-50%) translateY(0);
+        translateX(-50%)
+        translateY(0);
 
     pointer-events: auto;
 }
 
 .memory-text {
-
     font-size:
-        clamp(1.05rem,
+        clamp(
+            1.05rem,
             3vw,
-            1.4rem);
+            1.4rem
+        );
 
     line-height: 1.6;
 
     text-shadow:
-        0 0 15px rgba(255, 255, 255, 0.2);
+        0 0 15px
+        rgba(
+            255,
+            255,
+            255,
+            0.2
+        );
 }
 
 .close-memory {
-
     margin-top: 15px;
 
     padding:
         7px 18px;
 
     border:
-        1px solid rgba(255, 255, 255, 0.25);
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.25
+        );
 
     border-radius: 20px;
 
     background:
-        rgba(255, 255, 255, 0.05);
+        rgba(
+            255,
+            255,
+            255,
+            0.05
+        );
 
     color: white;
 
@@ -430,36 +529,50 @@ body {
 
 
 /* =========================================================
-   HISTORICAL SKY PANEL
+   HISTORICAL SKY
 ========================================================= */
 
 .historical-sky {
-
     position: fixed;
 
     inset: 0;
 
-    width: 100%;
-    height: 100%;
+    z-index: 100;
 
-    z-index: 55;
+    overflow: hidden;
 
     background:
-        radial-gradient(circle at 50% 45%,
-            rgba(24, 43, 82, 0.96),
-            rgba(2, 5, 17, 0.99));
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(
+                24,
+                43,
+                82,
+                0.96
+            ),
+            rgba(
+                2,
+                5,
+                17,
+                0.99
+            )
+        );
 
     opacity: 0;
+
+    visibility: hidden;
 
     pointer-events: none;
 
     transition:
-        opacity 0.8s ease;
+        opacity 0.8s ease,
+        visibility 0.8s ease;
 }
 
 .historical-sky.visible {
-
     opacity: 1;
+
+    visibility: visible;
 
     pointer-events: auto;
 }
@@ -470,17 +583,16 @@ body {
 ========================================================= */
 
 #historicalSkyCanvas {
-
     position: absolute;
 
     inset: 0;
 
+    display: block;
+
     width: 100%;
     height: 100%;
 
-    display: block;
-
-    z-index: 1;
+    z-index: 0;
 
     pointer-events: none;
 }
@@ -491,14 +603,9 @@ body {
 ========================================================= */
 
 .historical-sky-content {
-
     position: absolute;
 
-    left: 0;
-    right: 0;
-
-    top: 0;
-    bottom: 0;
+    inset: 0;
 
     z-index: 5;
 
@@ -510,63 +617,72 @@ body {
 
     justify-content: center;
 
-    pointer-events: none;
-
     text-align: center;
+
+    pointer-events: none;
 }
 
 .historical-sky h2 {
-
-    position: relative;
-
-    z-index: 5;
-
-    font-size:
-        clamp(1.5rem,
-            4vw,
-            2.5rem);
-
-    font-weight: normal;
-
     margin:
         0 0 5px;
 
+    font-size:
+        clamp(
+            1.5rem,
+            4vw,
+            2.5rem
+        );
+
+    font-weight: normal;
+
     text-shadow:
-        0 0 20px rgba(0, 0, 0, 0.7);
+        0 0 20px
+        rgba(
+            255,
+            255,
+            255,
+            0.3
+        );
 }
 
 .historical-sky-date {
-
-    position: relative;
-
-    z-index: 5;
-
     font-size: 0.95rem;
 
     opacity: 0.75;
 
-    margin-bottom: 15px;
+    margin-bottom: 8px;
+}
 
-    text-shadow:
-        0 0 15px rgba(0, 0, 0, 0.7);
+.historical-sky-status {
+    font-size: 0.8rem;
+
+    opacity: 0.45;
+
+    margin-bottom: 5px;
 }
 
 .historical-sky-close {
-
-    position: relative;
-
-    z-index: 5;
-
     margin-top: 20px;
 
     padding:
         9px 20px;
 
     border:
-        1px solid rgba(255, 255, 255, 0.3);
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.3
+        );
 
     background:
-        rgba(255, 255, 255, 0.07);
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
 
     color: white;
 
@@ -584,9 +700,13 @@ body {
 }
 
 .historical-sky-close:hover {
-
     background:
-        rgba(255, 255, 255, 0.15);
+        rgba(
+            255,
+            255,
+            255,
+            0.15
+        );
 
     transform:
         translateY(-2px);
@@ -598,17 +718,28 @@ body {
 ========================================================= */
 
 .special-sky {
-
-    position: absolute;
+    position: fixed;
 
     inset: 0;
 
-    z-index: 60;
+    z-index: 110;
 
     background:
-        radial-gradient(circle at 50% 35%,
-            rgba(40, 65, 120, 0.85),
-            rgba(3, 7, 20, 0.97));
+        radial-gradient(
+            circle at 50% 35%,
+            rgba(
+                40,
+                65,
+                120,
+                0.85
+            ),
+            rgba(
+                3,
+                7,
+                20,
+                0.97
+            )
+        );
 
     display: flex;
 
@@ -629,18 +760,18 @@ body {
 }
 
 .special-sky.visible {
-
     opacity: 1;
 
     pointer-events: auto;
 }
 
 .special-sky h2 {
-
     font-size:
-        clamp(1.8rem,
+        clamp(
+            1.8rem,
             5vw,
-            3rem);
+            3rem
+        );
 
     font-weight: normal;
 
@@ -648,7 +779,6 @@ body {
 }
 
 .special-sky p {
-
     max-width: 600px;
 
     width: 90%;
@@ -659,17 +789,27 @@ body {
 }
 
 .close-sky {
-
     margin-top: 25px;
 
     padding:
         10px 22px;
 
     border:
-        1px solid rgba(255, 255, 255, 0.3);
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.3
+        );
 
     background:
-        rgba(255, 255, 255, 0.07);
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
 
     color: white;
 
@@ -686,8 +826,7 @@ body {
 ========================================================= */
 
 .final-star {
-
-    position: absolute;
+    position: fixed;
 
     width: 8px;
     height: 8px;
@@ -695,62 +834,110 @@ body {
     border-radius: 50%;
 
     background:
-        radial-gradient(circle,
+        radial-gradient(
+            circle,
             white 0%,
             #fff8d5 35%,
             #ffd96a 65%,
-            transparent 100%);
+            transparent 100%
+        );
 
     box-shadow:
+        0 0 8px
+        rgba(
+            255,
+            245,
+            190,
+            1
+        ),
 
-        0 0 8px rgba(255, 245, 190, 1),
+        0 0 18px
+        rgba(
+            255,
+            220,
+            100,
+            0.9
+        ),
 
-        0 0 18px rgba(255, 220, 100, 0.9),
-
-        0 0 35px rgba(255, 210, 100, 0.45);
+        0 0 35px
+        rgba(
+            255,
+            210,
+            100,
+            0.45
+        );
 
     z-index: 30;
 
     opacity: 0;
 
     transition:
+        left 2.2s
+        cubic-bezier(
+            0.2,
+            0.8,
+            0.2,
+            1
+        ),
 
-        left 2.2s cubic-bezier(0.2, 0.8, 0.2, 1),
-
-        top 2.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+        top 2.2s
+        cubic-bezier(
+            0.2,
+            0.8,
+            0.2,
+            1
+        ),
 
         opacity 1s ease;
 }
 
 .final-star.arrived {
-
     opacity: 1;
 
     animation:
-        finalPulse 2.5s ease-in-out infinite alternate;
+        finalPulse
+        2.5s
+        ease-in-out
+        infinite
+        alternate;
 }
 
 @keyframes finalPulse {
 
     from {
-
         transform:
             scale(0.75);
 
         box-shadow:
-            0 0 7px rgba(255, 245, 190, 0.8);
+            0 0 7px
+            rgba(
+                255,
+                245,
+                190,
+                0.8
+            );
     }
 
     to {
-
         transform:
             scale(1.3);
 
         box-shadow:
+            0 0 12px
+            rgba(
+                255,
+                245,
+                190,
+                1
+            ),
 
-            0 0 12px rgba(255, 245, 190, 1),
-
-            0 0 28px rgba(255, 220, 100, 0.9);
+            0 0 28px
+            rgba(
+                255,
+                220,
+                100,
+                0.9
+            );
     }
 }
 
@@ -760,8 +947,7 @@ body {
 ========================================================= */
 
 .final-line {
-
-    position: absolute;
+    position: fixed;
 
     height: 1px;
 
@@ -769,13 +955,36 @@ body {
         0 50%;
 
     background:
-        linear-gradient(to right,
-            rgba(255, 245, 200, 0),
-            rgba(255, 245, 200, 0.75),
-            rgba(255, 245, 200, 0));
+        linear-gradient(
+            to right,
+            rgba(
+                255,
+                245,
+                200,
+                0
+            ),
+            rgba(
+                255,
+                245,
+                200,
+                0.75
+            ),
+            rgba(
+                255,
+                245,
+                200,
+                0
+            )
+        );
 
     box-shadow:
-        0 0 5px rgba(255, 230, 150, 0.35);
+        0 0 5px
+        rgba(
+            255,
+            230,
+            150,
+            0.35
+        );
 
     z-index: 25;
 
@@ -786,7 +995,6 @@ body {
 }
 
 .final-line.visible {
-
     opacity: 1;
 }
 
@@ -796,17 +1004,21 @@ body {
 ========================================================= */
 
 .final-message {
-
-    position: absolute;
+    position: fixed;
 
     left: 50%;
+
     bottom: 8%;
 
     transform:
-        translateX(-50%) translateY(20px);
+        translateX(-50%)
+        translateY(20px);
 
     width:
-        min(90%, 650px);
+        min(
+            90%,
+            650px
+        );
 
     text-align: center;
 
@@ -822,29 +1034,29 @@ body {
 }
 
 .final-message.visible {
-
     opacity: 1;
 
     transform:
-        translateX(-50%) translateY(0);
+        translateX(-50%)
+        translateY(0);
 }
 
 .final-message p {
-
     font-size:
-        clamp(1.1rem,
+        clamp(
+            1.1rem,
             3vw,
-            1.5rem);
+            1.5rem
+        );
 
     line-height: 1.7;
 
-    margin: 8px 0;
+    margin:
+        8px 0;
 }
 
 .final-message .small {
-
-    font-size:
-        0.9rem;
+    font-size: 0.9rem;
 
     opacity: 0.65;
 
@@ -857,23 +1069,40 @@ body {
 ========================================================= */
 
 .name-complete {
-
     animation:
-        nameGlow 4s ease-in-out infinite alternate;
+        nameGlow
+        4s
+        ease-in-out
+        infinite
+        alternate;
 }
 
 @keyframes nameGlow {
 
     from {
-
         filter:
-            drop-shadow(0 0 4px rgba(255, 240, 170, 0.3));
+            drop-shadow(
+                0 0 4px
+                rgba(
+                    255,
+                    240,
+                    170,
+                    0.3
+                )
+            );
     }
 
     to {
-
         filter:
-            drop-shadow(0 0 18px rgba(255, 230, 120, 0.8));
+            drop-shadow(
+                0 0 18px
+                rgba(
+                    255,
+                    230,
+                    120,
+                    0.8
+                )
+            );
     }
 }
 
@@ -885,43 +1114,29 @@ body {
 @media (max-width: 600px) {
 
     .memory-star {
-
         width: 8px;
         height: 8px;
     }
 
     .final-star {
-
         width: 7px;
         height: 7px;
     }
 
     .counter {
-
         top: 15px;
         right: 15px;
     }
 
     .final-message {
-
         bottom: 6%;
     }
 
     .historical-sky h2 {
-
-        font-size:
-            1.7rem;
-    }
-
-    .historical-sky-date {
-
-        font-size:
-            0.85rem;
+        margin-top: -30px;
     }
 
     .historical-sky-close {
-
-        padding:
-            8px 17px;
+        margin-top: 15px;
     }
 }
