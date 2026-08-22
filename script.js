@@ -2185,184 +2185,132 @@ function drawMemoryConstellation(
     width,
     height
 ) {
-
     const pattern =
         memoryConstellations[
-            memoryIndex %
-            memoryConstellations.length
+            memoryIndex % memoryConstellations.length
         ];
 
+    // Position the constellation more centrally
+    const startX = width * 0.5;
+    const startY = height * 0.43;
 
-    const isMobile =
-        width <= 600;
+    // Make it smaller and more elegant
+    const scaleX = width * 0.004;
+    const scaleY = height * 0.004;
 
+    const points = pattern.map(point => {
+        return {
+            x:
+                startX +
+                (point[0] - 40) * scaleX,
 
-    const startX =
-        width *
-        (
-            isMobile
-                ? 0.20
-                : 0.25
-        );
+            y:
+                startY +
+                (point[1] - 20) * scaleY
+        };
+    });
 
-
-    const startY =
-        height *
-        (
-            isMobile
-                ? 0.32
-                : 0.35
-        );
-
-
-    const scaleX =
-        width *
-        (
-            isMobile
-                ? 0.007
-                : 0.006
-        );
-
-
-    const scaleY =
-        height *
-        (
-            isMobile
-                ? 0.007
-                : 0.006
-        );
-
-
-    const points =
-        pattern.map(
-            point => {
-
-                return {
-
-                    x:
-                        startX +
-                        point[0] *
-                        scaleX,
-
-                    y:
-                        startY +
-                        point[1] *
-                        scaleY
-
-                };
-
-            }
-        );
-
+    /*
+     * -----------------------------------------------------
+     * CONSTELLATION LINES
+     * -----------------------------------------------------
+     */
 
     ctx.save();
 
-
-    /* -----------------------------------------------------
-       LINES
-    ----------------------------------------------------- */
-
     ctx.beginPath();
 
+    points.forEach((point, index) => {
 
-    points.forEach(
-        (
-            point,
-            index
-        ) => {
-
-            if (
-                index === 0
-            ) {
-
-                ctx.moveTo(
-                    point.x,
-                    point.y
-                );
-
-            }
-            else {
-
-                ctx.lineTo(
-                    point.x,
-                    point.y
-                );
-
-            }
-
+        if (index === 0) {
+            ctx.moveTo(
+                point.x,
+                point.y
+            );
         }
-    );
+        else {
+            ctx.lineTo(
+                point.x,
+                point.y
+            );
+        }
 
+    });
 
     ctx.strokeStyle =
-        isMobile
-            ? "rgba(255,240,170,0.7)"
-            : "rgba(255,240,170,0.55)";
+        "rgba(255,240,190,0.45)";
 
+    ctx.lineWidth = 1;
 
-    ctx.lineWidth =
-        isMobile
-            ? 1.5
-            : 1;
-
-
-    ctx.shadowBlur =
-        isMobile
-            ? 10
-            : 8;
-
+    ctx.shadowBlur = 6;
 
     ctx.shadowColor =
-        "rgba(255,220,120,0.55)";
-
+        "rgba(255,220,130,0.4)";
 
     ctx.stroke();
 
-
-    /* -----------------------------------------------------
-       MEMORY CONSTELLATION STARS
-    ----------------------------------------------------- */
-
-    points.forEach(
-        point => {
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                point.x,
-                point.y,
-
-                isMobile
-                    ? 5
-                    : 3,
-
-                0,
-                Math.PI * 2
-            );
-
-
-            ctx.fillStyle =
-                "#fff8d5";
-
-
-            ctx.shadowBlur =
-                isMobile
-                    ? 25
-                    : 15;
-
-
-            ctx.shadowColor =
-                "rgba(255,220,120,1)";
-
-
-            ctx.fill();
-
-        }
-    );
-
-
     ctx.restore();
+
+
+    /*
+     * -----------------------------------------------------
+     * CONSTELLATION STARS
+     * -----------------------------------------------------
+     */
+
+    points.forEach((point, index) => {
+
+        ctx.save();
+
+        /*
+         * Main star
+         */
+
+        ctx.beginPath();
+
+        ctx.arc(
+            point.x,
+            point.y,
+            index === 0 ? 4 : 2.5,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            "#fff9dc";
+
+        ctx.shadowBlur =
+            index === 0 ? 18 : 10;
+
+        ctx.shadowColor =
+            "rgba(255,225,140,0.9)";
+
+        ctx.fill();
+
+
+        /*
+         * Tiny glow around each star
+         */
+
+        ctx.beginPath();
+
+        ctx.arc(
+            point.x,
+            point.y,
+            index === 0 ? 7 : 4,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fillStyle =
+            "rgba(255,230,150,0.08)";
+
+        ctx.shadowBlur = 0;
+
+        ctx.fill();
+
+        ctx.restore();
+    });
 }
 
 
@@ -2594,6 +2542,8 @@ function beginFinalReveal() {
 
 
     finalRevealStarted = true;
+
+    document.body.classList.add("final-reveal");
 
 
     counter.classList.remove(
