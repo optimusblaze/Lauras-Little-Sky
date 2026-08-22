@@ -1111,6 +1111,21 @@ body {
     }
 }
 
+/* =========================================================
+   FINAL LAURA REVEAL
+   ========================================================= */
+
+body.final-reveal .background-star {
+    animation-play-state: paused;
+    opacity: 0.35;
+    transition: opacity 1.5s ease;
+}
+
+body.final-reveal #background {
+    opacity: 0.65;
+    transition: opacity 2s ease;
+}
+
 
 /* =========================================================
    MOBILE
