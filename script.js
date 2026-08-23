@@ -5,12 +5,10 @@
 const TOTAL_STARS = 30;
 
 let foundStars = 0;
-
 let gameStarted = false;
 let finalRevealStarted = false;
 
 const discoveredStars = new Set();
-
 const memoryStars = [];
 
 
@@ -84,8 +82,11 @@ const closeHistoricalSky =
     document.getElementById("closeHistoricalSky");
 
 
-totalCount.textContent =
-    TOTAL_STARS;
+/* =========================================================
+   COUNTER
+========================================================= */
+
+totalCount.textContent = TOTAL_STARS;
 
 
 /* =========================================================
@@ -113,16 +114,11 @@ function createBackgroundStars() {
 
         star.style.setProperty(
             "--duration",
-            (
-                1.5 +
-                Math.random() * 4
-            ) + "s"
+            (1.5 + Math.random() * 4) + "s"
         );
 
         star.style.animationDelay =
-            (
-                Math.random() * 4
-            ) + "s";
+            (Math.random() * 4) + "s";
 
         background.appendChild(star);
     }
@@ -138,20 +134,8 @@ const memories = [
     {
         message:
             "The first date. Quayside Bar & Grill in Dundee, then going to watch Michael, snuggled up together.",
-
         type: "date",
-
-        skyDate:
-            "11 June 2026",
-
-        skyTime:
-            "22:00",
-
-        skyLocation: {
-            name: "Dundee, Scotland",
-            latitude: 56.46913,
-            longitude: -2.97489
-        }
+        skyDate: "11 June 2026"
     },
 
     {
@@ -262,29 +246,11 @@ const memories = [
         type: "normal"
     },
 
-
-    /* =====================================================
-       LAURA'S BIRTHDAY
-    ===================================================== */
-
     {
         message:
             "January 18th. Your day.",
-
-        type:
-            "birthday",
-
-        skyDate:
-            "18 January 1989",
-
-        skyTime:
-            "20:16",
-
-        skyLocation: {
-            name: "Arbroath, Scotland",
-            latitude: 56.563173,
-            longitude: -2.587360
-        }
+        type: "birthday",
+        skyDate: "18 January 1989"
     },
 
     {
@@ -425,53 +391,40 @@ const memoryConstellations = [
 
 function createMemoryStars() {
 
-    memories.forEach(
-        (memory, index) => {
+    memories.forEach((memory, index) => {
 
-            const star =
-                document.createElement("div");
+        const star =
+            document.createElement("div");
 
-            star.className =
-                "memory-star";
+        star.className =
+            "memory-star";
 
-            const x =
-                7 +
-                Math.random() * 86;
+        const x =
+            7 + Math.random() * 86;
 
-            const y =
-                8 +
-                Math.random() * 66;
+        const y =
+            8 + Math.random() * 70;
 
-            star.style.left =
-                x + "%";
+        star.style.left =
+            x + "%";
 
-            star.style.top =
-                y + "%";
+        star.style.top =
+            y + "%";
 
-            star.dataset.index =
-                index;
+        star.dataset.index =
+            index;
 
-            star.addEventListener(
-                "click",
-                () => {
+        star.addEventListener(
+            "click",
+            () => {
+                discoverStar(index, star);
+            }
+        );
 
-                    discoverStar(
-                        index,
-                        star
-                    );
+        document.body.appendChild(star);
 
-                }
-            );
-
-            document.body.appendChild(
-                star
-            );
-
-            memoryStars.push(
-                star
-            );
-        }
-    );
+        memoryStars.push(star);
+    });
 }
 
 
@@ -479,10 +432,7 @@ function createMemoryStars() {
    DISCOVER STAR
 ========================================================= */
 
-function discoverStar(
-    index,
-    star
-) {
+function discoverStar(index, star) {
 
     if (!gameStarted) {
         return;
@@ -492,43 +442,26 @@ function discoverStar(
         return;
     }
 
-    if (discoveredStars.has(index)) {
+    /*
+       IMPORTANT:
+       We no longer permanently block discovered stars.
 
-        showMemory(
-            memories[index]
-        );
-
-        if (
-            memories[index].skyDate
-        ) {
-
-            setTimeout(
-                () => {
-
-                    showHistoricalSky(
-                        memories[index]
-                    );
-
-                },
-                700
-            );
-        }
-
-        return;
-    }
-
+       This means Laura can click a star again later
+       to reread its memory.
+    */
 
     discoveredStars.add(index);
 
-    foundStars++;
+    if (!star.classList.contains("discovered")) {
 
-    foundCount.textContent =
-        foundStars;
+        foundStars++;
 
+        foundCount.textContent =
+            foundStars;
 
-    star.classList.add(
-        "discovered"
-    );
+        star.classList.add("discovered");
+
+    }
 
     star.style.transform =
         "scale(2.6)";
@@ -540,48 +473,52 @@ function discoverStar(
         "0 0 90px rgba(255,210,80,.5)";
 
 
-    showMemory(
-        memories[index]
-    );
+    showMemory(memories[index]);
 
 
-    if (
-        memories[index].skyDate
-    ) {
+    /*
+       Show real historical sky
+       if this memory has a date.
+    */
 
-        setTimeout(
-            () => {
+    if (memories[index].skyDate) {
 
-                showHistoricalSky(
-                    memories[index]
-                );
+        setTimeout(() => {
 
-            },
-            700
-        );
+            showHistoricalSky(
+                memories[index].skyDate,
+                index
+            );
+
+        }, 700);
+
     }
 
 
+    /*
+       LAST STAR
+    */
+
     if (
-        foundStars === TOTAL_STARS
+        foundStars === TOTAL_STARS &&
+        !finalRevealStarted
     ) {
 
-        setTimeout(
-            () => {
+        setTimeout(() => {
 
-                closeMemoryPanel();
+            closeMemoryPanel();
 
-                closeHistoricalSkyPanel();
+            closeHistoricalSkyPanel();
 
-                setTimeout(
-                    beginFinalReveal,
-                    1200
-                );
+            setTimeout(
+                beginFinalReveal,
+                1200
+            );
 
-            },
-            3000
-        );
+        }, 3000);
+
     }
+
 }
 
 
@@ -635,6 +572,7 @@ async function loadHistoricalSkyData() {
             throw new Error(
                 "Could not load hip_stars.json"
             );
+
         }
 
         window.HIP_STARS =
@@ -651,6 +589,7 @@ async function loadHistoricalSkyData() {
             throw new Error(
                 "Could not load hip_constellation_lines.json"
             );
+
         }
 
         window.HIP_CONSTELLATION_LINES =
@@ -677,107 +616,74 @@ async function loadHistoricalSkyData() {
             "Historical sky data failed to load:",
             error
         );
+
     }
+
 }
 
 
 /* =========================================================
-   TIMEZONE HANDLING
+   DATE PARSER
 ========================================================= */
 
-function getUTCDateForSky(
-    dateString,
-    timeString,
-    locationName
-) {
-
-    let offsetHours = 0;
-
+function parseSkyDate(dateString) {
 
     /*
-        Dundee:
-        11 June 2026 = BST = UTC+1
+       Default time:
+       10:00 PM
+
+       This is what we use for memories where
+       only the date is supplied.
     */
-
-    if (
-        dateString === "11 June 2026"
-    ) {
-
-        offsetHours = 1;
-
-    }
-
-
-    /*
-        Arbroath:
-        18 January 1989 = GMT = UTC+0
-    */
-
-    if (
-        dateString === "18 January 1989"
-    ) {
-
-        offsetHours = 0;
-
-    }
-
 
     const parts =
-        dateString.split(" ");
-
-    const day =
-        Number(parts[0]);
-
-
-    const monthNames = [
-
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-
-    ];
-
-
-    const month =
-        monthNames.indexOf(
-            parts[1]
+        dateString.match(
+            /(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/
         );
 
+    if (!parts) {
+
+        return new Date(
+            "2026-06-11T22:00:00"
+        );
+
+    }
+
+    const day =
+        Number(parts[1]);
+
+    const monthName =
+        parts[2];
 
     const year =
-        Number(parts[2]);
+        Number(parts[3]);
 
 
-    const timeParts =
-        timeString.split(":");
+    const months = {
 
+        January: 0,
+        February: 1,
+        March: 2,
+        April: 3,
+        May: 4,
+        June: 5,
+        July: 6,
+        August: 7,
+        September: 8,
+        October: 9,
+        November: 10,
+        December: 11
 
-    const hour =
-        Number(timeParts[0]);
-
-
-    const minute =
-        Number(timeParts[1]);
+    };
 
 
     return new Date(
-        Date.UTC(
-            year,
-            month,
-            day,
-            hour - offsetHours,
-            minute,
-            0
-        )
+        year,
+        months[monthName],
+        day,
+        22,
+        0,
+        0
     );
 }
 
@@ -786,49 +692,34 @@ function getUTCDateForSky(
    JULIAN DATE
 ========================================================= */
 
-function julianDate(date) {
+function getJulianDate(date) {
 
     return (
-        date.getTime() /
-        86400000
-    ) +
-    2440587.5;
+        date.getTime() / 86400000
+    ) + 2440587.5;
+
 }
 
 
 /* =========================================================
-   JULIAN CENTURIES
+   GREENWICH SIDEREAL TIME
 ========================================================= */
 
-function julianCenturies(jd) {
+function getGMST(date) {
 
-    return (
-        jd -
-        2451545.0
-    ) /
-    36525.0;
-}
-
-
-/* =========================================================
-   GMST
-========================================================= */
-
-function calculateGMST(jd) {
+    const JD =
+        getJulianDate(date);
 
     const T =
-        julianCenturies(jd);
+        (JD - 2451545.0) / 36525;
 
 
     let gmst =
         280.46061837 +
         360.98564736629 *
-        (jd - 2451545.0) +
-        0.000387933 *
-        T *
-        T -
-        (T * T * T) /
-        38710000;
+        (JD - 2451545.0) +
+        0.000387933 * T * T -
+        (T * T * T) / 38710000;
 
 
     gmst =
@@ -836,245 +727,74 @@ function calculateGMST(jd) {
 
 
     return gmst;
+
 }
 
 
 /* =========================================================
-   DEG / RAD
+   LOCAL SIDEREAL TIME
 ========================================================= */
 
-function degToRad(deg) {
+function getLST(date, longitude) {
 
-    return (
-        deg *
-        Math.PI /
-        180
-    );
-}
+    let lst =
+        getGMST(date) +
+        longitude;
 
 
-function radToDeg(rad) {
+    lst =
+        ((lst % 360) + 360) % 360;
 
-    return (
-        rad *
-        180 /
-        Math.PI
-    );
+
+    return lst;
+
 }
 
 
 /* =========================================================
-   NORMALISE ANGLE
+   RA / DEC → ALT / AZ
 ========================================================= */
 
-function normalizeDegrees(
-    degrees
-) {
-
-    return (
-        (degrees % 360) +
-        360
-    ) % 360;
-}
-
-
-/* =========================================================
-   PROPAGATE HIPPARCOS POSITION
-========================================================= */
-
-function propagateStarPosition(
-    star,
-    targetDate
-) {
-
-    let ra =
-        Number(
-            star.ra ??
-            star.RA ??
-            star.right_ascension ??
-            star.alpha ??
-            star.hip_ra
-        );
-
-
-    let dec =
-        Number(
-            star.dec ??
-            star.DEC ??
-            star.declination ??
-            star.delta ??
-            star.hip_dec
-        );
-
-
-    if (
-        !Number.isFinite(ra) ||
-        !Number.isFinite(dec)
-    ) {
-
-        return null;
-    }
-
-
-    const pmRa =
-        Number(
-            star.pmra ??
-            star.pmRA ??
-            star.mu_alpha ??
-            star.muAlpha ??
-            star.mu_ra ??
-            star.pm_alpha ??
-            0
-        );
-
-
-    const pmDec =
-        Number(
-            star.pmdec ??
-            star.pmDEC ??
-            star.mu_delta ??
-            star.muDelta ??
-            star.mu_dec ??
-            star.pm_delta ??
-            0
-        );
-
-
-    const targetJD =
-        julianDate(
-            targetDate
-        );
-
-
-    const targetYear =
-        2000 +
-        (
-            targetJD -
-            2451545.0
-        ) /
-        365.25;
-
-
-    const yearsSinceHipparcos =
-        targetYear -
-        1991.25;
-
-
-    const masToDegrees =
-        1 /
-        3600000;
-
-
-    const cosDec =
-        Math.cos(
-            degToRad(dec)
-        );
-
-
-    if (
-        Math.abs(cosDec) >
-        0.000001 &&
-        Number.isFinite(pmRa)
-    ) {
-
-        ra +=
-            (
-                pmRa *
-                masToDegrees *
-                yearsSinceHipparcos
-            ) /
-            cosDec;
-    }
-
-
-    if (
-        Number.isFinite(pmDec)
-    ) {
-
-        dec +=
-            pmDec *
-            masToDegrees *
-            yearsSinceHipparcos;
-    }
-
-
-    ra =
-        normalizeDegrees(
-            ra
-        );
-
-
-    dec =
-        Math.max(
-            -90,
-            Math.min(
-                90,
-                dec
-            )
-        );
-
-
-    return {
-        ra,
-        dec
-    };
-}
-
-
-/* =========================================================
-   EQUATORIAL -> HORIZONTAL
-========================================================= */
-
-function equatorialToHorizontal(
-    ra,
-    dec,
+function raDecToAltAz(
+    raHours,
+    decDegrees,
+    date,
     latitude,
-    longitude,
-    jd
+    longitude
 ) {
-
-    const gmst =
-        calculateGMST(jd);
-
 
     const lst =
-        normalizeDegrees(
-            gmst +
-            longitude
-        );
+        getLST(date, longitude);
 
 
-    const hourAngle =
-        normalizeDegrees(
-            lst -
-            ra
-        );
+    const raDegrees =
+        raHours * 15;
+
+
+    let hourAngle =
+        lst - raDegrees;
+
+
+    hourAngle =
+        ((hourAngle + 180) % 360) - 180;
 
 
     const H =
-        degToRad(
-            hourAngle
-        );
+        hourAngle * Math.PI / 180;
 
+    const dec =
+        decDegrees * Math.PI / 180;
 
     const lat =
-        degToRad(
-            latitude
-        );
+        latitude * Math.PI / 180;
 
 
-    const declination =
-        degToRad(
-            dec
-        );
+    const sinAlt =
+        Math.sin(dec) *
+        Math.sin(lat) +
 
-
-    const sinAltitude =
-        Math.sin(lat) *
-        Math.sin(declination) +
-
+        Math.cos(dec) *
         Math.cos(lat) *
-        Math.cos(declination) *
         Math.cos(H);
 
 
@@ -1082,10 +802,7 @@ function equatorialToHorizontal(
         Math.asin(
             Math.max(
                 -1,
-                Math.min(
-                    1,
-                    sinAltitude
-                )
+                Math.min(1, sinAlt)
             )
         );
 
@@ -1093,283 +810,71 @@ function equatorialToHorizontal(
     const azimuth =
         Math.atan2(
 
-            -Math.sin(H),
+            -Math.sin(H) *
+            Math.cos(dec),
 
-            Math.tan(declination) *
+            Math.sin(dec) *
             Math.cos(lat) -
 
+            Math.cos(dec) *
             Math.sin(lat) *
             Math.cos(H)
 
         );
 
 
+    let az =
+        azimuth * 180 / Math.PI;
+
+
+    az =
+        (az + 360) % 360;
+
+
     return {
 
         altitude:
-            radToDeg(
-                altitude
-            ),
+            altitude * 180 / Math.PI,
 
         azimuth:
-            normalizeDegrees(
-                radToDeg(
-                    azimuth
-                )
-            )
+            az
 
     };
+
 }
 
 
 /* =========================================================
-   SKY PROJECTION
+   SHOW HISTORICAL SKY
 ========================================================= */
 
-function projectSkyPosition(
-    altitude,
-    azimuth,
-    width,
-    height
+function showHistoricalSky(
+    dateString,
+    memoryIndex
 ) {
 
-    if (
-        altitude <= 0
-    ) {
-
-        return null;
-    }
+    historicalSkyTitle.textContent =
+        "The sky above us";
 
 
-    /*
-        Slightly larger sky dome on mobile.
-
-        This gives the stars more room and makes
-        the historical sky easier to read on phones.
-    */
-
-    const isMobile =
-        width <= 600;
+    historicalSkyDate.textContent =
+        `${dateString} · 10:00 PM`;
 
 
-    const maxRadius =
-        Math.min(
-            width,
-            height
-        ) *
-        (
-            isMobile
-                ? 0.43
-                : 0.44
-        );
+    historicalSkyLocation.textContent =
+        "Dundee, Scotland";
 
 
-    const zenithAngle =
-        90 -
-        altitude;
+    historicalSky.classList.add(
+        "visible"
+    );
 
 
-    const radius =
-        maxRadius *
-        (
-            zenithAngle /
-            90
-        );
+    drawHistoricalSky(
+        dateString,
+        memoryIndex
+    );
 
-
-    const az =
-        degToRad(
-            azimuth
-        );
-
-
-    const x =
-        width / 2 +
-        Math.sin(az) *
-        radius;
-
-
-    const y =
-        height / 2 -
-        Math.cos(az) *
-        radius;
-
-
-    return {
-        x,
-        y
-    };
-}
-
-
-/* =========================================================
-   STAR BRIGHTNESS
-========================================================= */
-
-/*
-    This is the part that controls how clearly the
-    real stars appear.
-
-    Smaller astronomical magnitude =
-    brighter star.
-
-    Mobile gets a deliberate boost so the stars
-    remain visible on a small screen.
-*/
-
-function getStarBrightness(
-    magnitude
-) {
-
-    if (
-        !Number.isFinite(
-            magnitude
-        )
-    ) {
-
-        magnitude = 6;
-    }
-
-
-    /*
-        Convert astronomical magnitude into
-        a useful visual brightness value.
-
-        Bright stars:
-            magnitude 0 -> very bright
-
-        Faint stars:
-            magnitude 6 -> still visible
-    */
-
-    const baseBrightness =
-        Math.pow(
-            10,
-            -0.4 *
-            magnitude
-        );
-
-
-    const normalised =
-        Math.min(
-            1,
-            Math.max(
-                0.08,
-                baseBrightness * 3
-            )
-        );
-
-
-    return normalised;
-}
-
-
-/* =========================================================
-   STAR VISUAL SETTINGS
-========================================================= */
-
-function getStarVisualSettings(
-    magnitude
-) {
-
-    const isMobile =
-        window.innerWidth <= 600;
-
-
-    const brightness =
-        getStarBrightness(
-            magnitude
-        );
-
-
-    /*
-        Brighter stars get substantially larger.
-
-        Mobile deliberately increases both
-        size and glow.
-    */
-
-    let radius;
-
-
-    if (isMobile) {
-
-        radius =
-            Math.max(
-                1.05,
-                Math.min(
-                    4.4,
-                    1.0 +
-                    brightness * 3.4
-                )
-            );
-
-    }
-    else {
-
-        radius =
-            Math.max(
-                0.65,
-                Math.min(
-                    3.4,
-                    0.65 +
-                    brightness * 2.6
-                )
-            );
-
-    }
-
-
-    const alpha =
-        isMobile
-
-            ? Math.max(
-                0.58,
-                Math.min(
-                    1,
-                    0.55 +
-                    brightness * 0.55
-                )
-            )
-
-            : Math.max(
-                0.32,
-                Math.min(
-                    1,
-                    0.35 +
-                    brightness * 0.55
-                )
-            );
-
-
-    const glow =
-        isMobile
-
-            ? Math.max(
-                3,
-                Math.min(
-                    18,
-                    4 +
-                    brightness * 14
-                )
-            )
-
-            : Math.max(
-                2,
-                Math.min(
-                    10,
-                    2 +
-                    brightness * 8
-                )
-            );
-
-
-    return {
-        radius,
-        alpha,
-        glow,
-        brightness
-    };
 }
 
 
@@ -1378,57 +883,33 @@ function getStarVisualSettings(
 ========================================================= */
 
 function drawHistoricalSky(
-    memory
+    dateString,
+    memoryIndex
 ) {
 
     const canvas =
         historicalSkyCanvas;
 
-
     const ctx =
-        canvas.getContext(
-            "2d"
-        );
+        canvas.getContext("2d");
 
 
     const dpr =
-        Math.min(
-            window.devicePixelRatio ||
-            1,
-            2
-        );
+        window.devicePixelRatio || 1;
 
 
     const width =
         window.innerWidth;
 
-
     const height =
         window.innerHeight;
 
 
-    const isMobile =
-        width <= 600;
-
-
     canvas.width =
-        width *
-        dpr;
-
+        width * dpr;
 
     canvas.height =
-        height *
-        dpr;
-
-
-    canvas.style.width =
-        width +
-        "px";
-
-
-    canvas.style.height =
-        height +
-        "px";
+        height * dpr;
 
 
     ctx.setTransform(
@@ -1441,42 +922,62 @@ function drawHistoricalSky(
     );
 
 
-    /* -----------------------------------------------------
-       BACKGROUND
-    ----------------------------------------------------- */
+    /*
+       Dundee coordinates.
+
+       Latitude:
+       56.4620 N
+
+       Longitude:
+       2.9707 W
+       = -2.9707
+    */
+
+    const latitude =
+        56.4620;
+
+    const longitude =
+        -2.9707;
+
+
+    const date =
+        parseSkyDate(dateString);
+
+
+    /* =====================================================
+       SKY BACKGROUND
+    ====================================================== */
 
     const gradient =
         ctx.createRadialGradient(
 
-            width / 2,
-            height / 2,
-            10,
+            width * 0.5,
+            height * 0.35,
+            0,
 
-            width / 2,
-            height / 2,
+            width * 0.5,
+            height * 0.45,
             Math.max(
                 width,
                 height
-            ) * 0.65
+            )
 
         );
 
 
     gradient.addColorStop(
         0,
-        "#142956"
+        "#162a5a"
     );
-
 
     gradient.addColorStop(
         0.45,
-        "#08132f"
+        "#0b1737"
     );
-
 
     gradient.addColorStop(
         1,
-        "#01030c"
+        "#020611"
     );
 
 
@@ -1492,896 +993,431 @@ function drawHistoricalSky(
     );
 
 
-    /* -----------------------------------------------------
-       SKY CIRCLE
-    ----------------------------------------------------- */
-
-    const radius =
-        Math.min(
-            width,
-            height
-        ) *
-        (
-            isMobile
-                ? 0.43
-                : 0.44
-        );
-
-
-    ctx.beginPath();
-
-
-    ctx.arc(
-        width / 2,
-        height / 2,
-        radius,
-        0,
-        Math.PI * 2
-    );
-
-
-    ctx.strokeStyle =
-        isMobile
-            ? "rgba(255,255,255,0.14)"
-            : "rgba(255,255,255,0.08)";
-
-
-    ctx.lineWidth =
-        isMobile
-            ? 1.5
-            : 1;
-
-
-    ctx.stroke();
-
-
-    /* -----------------------------------------------------
-       COMPASS LABELS
-    ----------------------------------------------------- */
-
-    drawCompassLabels(
-        ctx,
-        width,
-        height,
-        radius
-    );
-
-
-    /* -----------------------------------------------------
-       TARGET UTC TIME
-    ----------------------------------------------------- */
-
-    const targetDate =
-        getUTCDateForSky(
-            memory.skyDate,
-            memory.skyTime,
-            memory.skyLocation.name
-        );
-
-
-    const jd =
-        julianDate(
-            targetDate
-        );
-
-
-    /* -----------------------------------------------------
-       DRAW REAL HIPPARCOS STARS
-    ----------------------------------------------------- */
-
-    const stars =
-        window.HIP_STARS || [];
-
-
-    stars.forEach(
-        star => {
-
-            const position =
-                propagateStarPosition(
-                    star,
-                    targetDate
-                );
-
-
-            if (!position) {
-                return;
-            }
-
-
-            const horizontal =
-                equatorialToHorizontal(
-
-                    position.ra,
-                    position.dec,
-
-                    memory.skyLocation.latitude,
-                    memory.skyLocation.longitude,
-
-                    jd
-
-                );
-
-
-            if (
-                horizontal.altitude <= 0
-            ) {
-
-                return;
-            }
-
-
-            const projected =
-                projectSkyPosition(
-
-                    horizontal.altitude,
-                    horizontal.azimuth,
-
-                    width,
-                    height
-
-                );
-
-
-            if (!projected) {
-                return;
-            }
-
-
-            const magnitude =
-                Number(
-                    star.mag ??
-                    star.magnitude ??
-                    star.vmag ??
-                    star.Vmag ??
-                    6
-                );
-
-
-            const visual =
-                getStarVisualSettings(
-                    magnitude
-                );
-
-
-            /* -------------------------------------------------
-               SOFT OUTER GLOW
-            ------------------------------------------------- */
-
-            if (
-                visual.glow > 0
-            ) {
-
-                ctx.beginPath();
-
-
-                ctx.arc(
-                    projected.x,
-                    projected.y,
-                    visual.radius,
-                    0,
-                    Math.PI * 2
-                );
-
-
-                ctx.fillStyle =
-                    `rgba(255,238,180,${Math.min(
-                        0.35,
-                        visual.brightness * 0.28
-                    )})`;
-
-
-                ctx.shadowBlur =
-                    visual.glow;
-
-
-                ctx.shadowColor =
-                    "rgba(255,230,150,0.95)";
-
-
-                ctx.fill();
-
-            }
-
-
-            /* -------------------------------------------------
-               STAR CORE
-
-               Mobile gets a stronger white core so
-               the star doesn't disappear into the glow.
-            ------------------------------------------------- */
-
-            ctx.beginPath();
-
-
-            ctx.arc(
-                projected.x,
-                projected.y,
-                visual.radius,
-                0,
-                Math.PI * 2
-            );
-
-
-            if (isMobile) {
-
-                ctx.fillStyle =
-                    `rgba(255,252,235,${visual.alpha})`;
-
-            }
-            else {
-
-                ctx.fillStyle =
-                    `rgba(255,248,220,${visual.alpha})`;
-
-            }
-
-
-            ctx.shadowBlur =
-                visual.glow;
-
-
-            ctx.shadowColor =
-                "rgba(255,235,170,0.95)";
-
-
-            ctx.fill();
-
-
-            /* -------------------------------------------------
-               EXTRA WHITE PINPOINT FOR BRIGHT STARS
-            ------------------------------------------------- */
-
-            if (
-                visual.brightness > 0.42
-            ) {
-
-                ctx.beginPath();
-
-
-                ctx.arc(
-                    projected.x,
-                    projected.y,
-                    Math.max(
-                        0.55,
-                        visual.radius * 0.32
-                    ),
-                    0,
-                    Math.PI * 2
-                );
-
-
-                ctx.fillStyle =
-                    "rgba(255,255,255,0.95)";
-
-
-                ctx.shadowBlur =
-                    0;
-
-
-                ctx.fill();
-
-            }
-
-        }
-    );
-
-
-    ctx.shadowBlur =
-        0;
-
-
-    /* -----------------------------------------------------
-       CONSTELLATION LINES
-    ----------------------------------------------------- */
-
-    drawRealConstellationLines(
-        ctx,
-        targetDate,
-        memory.skyLocation,
-        width,
-        height
-    );
-
-
-    /* -----------------------------------------------------
-       MEMORY CONSTELLATION
-    ----------------------------------------------------- */
-
-    const memoryIndex =
-        memories.indexOf(
-            memory
-        );
-
-
-    drawMemoryConstellation(
-        ctx,
-        memoryIndex,
-        width,
-        height
-    );
-
-
-    ctx.shadowBlur =
-        0;
-}
-
-
-/* =========================================================
-   COMPASS LABELS
-========================================================= */
-
-function drawCompassLabels(
-    ctx,
-    width,
-    height,
-    radius
-) {
-
-    const labels = [
-
-        {
-            text: "N",
-            azimuth: 0
-        },
-
-        {
-            text: "E",
-            azimuth: 90
-        },
-
-        {
-            text: "S",
-            azimuth: 180
-        },
-
-        {
-            text: "W",
-            azimuth: 270
-        }
-
-    ];
-
-
-    const isMobile =
-        width <= 600;
-
+    /* =====================================================
+       SUBTLE MILKY WAY GLOW
+    ====================================================== */
 
     ctx.save();
 
+    ctx.globalAlpha =
+        0.055;
 
-    ctx.font =
-        isMobile
-            ? "14px Georgia"
-            : "12px Georgia";
+    ctx.translate(
+        width * 0.5,
+        height * 0.5
+    );
+
+    ctx.rotate(
+        -0.35
+    );
+
+
+    const milkyWay =
+        ctx.createLinearGradient(
+            -width,
+            0,
+            width,
+            0
+        );
+
+
+    milkyWay.addColorStop(
+        0,
+        "transparent"
+    );
+
+    milkyWay.addColorStop(
+        0.5,
+        "rgba(180,200,255,0.9)"
+    );
+
+    milkyWay.addColorStop(
+        1,
+        "transparent"
+    );
 
 
     ctx.fillStyle =
-        isMobile
-            ? "rgba(255,255,255,0.55)"
-            : "rgba(255,255,255,0.35)";
+        milkyWay;
 
 
-    ctx.textAlign =
-        "center";
-
-
-    ctx.textBaseline =
-        "middle";
-
-
-    labels.forEach(
-        label => {
-
-            const angle =
-                degToRad(
-                    label.azimuth
-                );
-
-
-            const x =
-                width / 2 +
-                Math.sin(angle) *
-                (radius + (
-                    isMobile
-                        ? 22
-                        : 18
-                ));
-
-
-            const y =
-                height / 2 -
-                Math.cos(angle) *
-                (radius + (
-                    isMobile
-                        ? 22
-                        : 18
-                ));
-
-
-            ctx.fillText(
-                label.text,
-                x,
-                y
-            );
-
-        }
+    ctx.fillRect(
+        -width,
+        -height * 0.18,
+        width * 2,
+        height * 0.36
     );
 
 
     ctx.restore();
-}
 
 
-/* =========================================================
-   REAL CONSTELLATION LINES
-========================================================= */
+    /* =====================================================
+       SKY PROJECTION
 
-function getStarId(star) {
+       We imagine Laura is lying back and looking upward.
 
-    return String(
-        star.hip ??
-        star.HIP ??
-        star.id ??
-        star.ID ??
-        star.hipId ??
-        star.HIP_ID ??
-        ""
-    );
-}
+       Zenith = centre of screen.
+
+       Horizon = near the bottom.
+
+       This is NOT a giant circular star chart.
+    ====================================================== */
 
 
-function getLinePair(line) {
+    const centreX =
+        width * 0.5;
 
-    if (
-        Array.isArray(line) &&
-        line.length >= 2
-    ) {
-
-        return [
-            String(line[0]),
-            String(line[1])
-        ];
-    }
+    const centreY =
+        height * 0.46;
 
 
-    if (
-        line &&
-        typeof line === "object"
-    ) {
+    const skyRadius =
+        Math.min(
+            width * 0.72,
+            height * 0.88
+        );
 
-        const a =
-            line.hip1 ??
-            line.HIP1 ??
-            line.from ??
-            line.start ??
-            line.a ??
-            line[0];
-
-
-        const b =
-            line.hip2 ??
-            line.HIP2 ??
-            line.to ??
-            line.end ??
-            line.b ??
-            line[1];
-
-
-        if (
-            a !== undefined &&
-            b !== undefined
-        ) {
-
-            return [
-                String(a),
-                String(b)
-            ];
-        }
-    }
-
-
-    return null;
-}
-
-
-function drawRealConstellationLines(
-    ctx,
-    targetDate,
-    location,
-    width,
-    height
-) {
 
     const stars =
         window.HIP_STARS || [];
 
 
-    const lines =
-        window.HIP_CONSTELLATION_LINES || [];
+    /*
+       Sort stars by magnitude so brighter stars
+       are drawn last and remain visible.
+    */
+
+    const visibleStars =
+        [];
 
 
-    if (
-        stars.length === 0 ||
-        lines.length === 0
-    ) {
+    stars.forEach(star => {
 
-        return;
-    }
-
-
-    const starPositions =
-        new Map();
+        const ra =
+            Number(
+                star.ra ??
+                star.RA ??
+                star.right_ascension ??
+                0
+            );
 
 
-    const jd =
-        julianDate(
-            targetDate
-        );
+        const dec =
+            Number(
+                star.dec ??
+                star.DEC ??
+                star.declination ??
+                0
+            );
 
 
-    stars.forEach(
-        star => {
-
-            const id =
-                getStarId(star);
-
-
-            if (!id) {
-                return;
-            }
+        const magnitude =
+            Number(
+                star.mag ??
+                star.magnitude ??
+                star.vmag ??
+                5
+            );
 
 
-            const position =
-                propagateStarPosition(
-                    star,
-                    targetDate
-                );
+        if (
+            !Number.isFinite(ra) ||
+            !Number.isFinite(dec)
+        ) {
 
-
-            if (!position) {
-                return;
-            }
-
-
-            const horizontal =
-                equatorialToHorizontal(
-
-                    position.ra,
-                    position.dec,
-
-                    location.latitude,
-                    location.longitude,
-
-                    jd
-                );
-
-
-            if (
-                horizontal.altitude <= 0
-            ) {
-
-                return;
-            }
-
-
-            const projected =
-                projectSkyPosition(
-
-                    horizontal.altitude,
-                    horizontal.azimuth,
-
-                    width,
-                    height
-                );
-
-
-            if (projected) {
-
-                starPositions.set(
-                    id,
-                    projected
-                );
-
-            }
+            return;
 
         }
+
+
+        const horizontal =
+            raDecToAltAz(
+                ra,
+                dec,
+                date,
+                latitude,
+                longitude
+            );
+
+
+        /*
+           Only draw stars above the horizon.
+
+           A little below the horizon is allowed
+           near the bottom edge for a natural fade.
+        */
+
+        if (
+            horizontal.altitude < -8
+        ) {
+
+            return;
+
+        }
+
+
+        const altitudeRadians =
+            horizontal.altitude *
+            Math.PI / 180;
+
+
+        const azimuthRadians =
+            horizontal.azimuth *
+            Math.PI / 180;
+
+
+        /*
+           Projection:
+
+           Zenith is centre.
+
+           North = upward.
+
+           East = right.
+
+           South = down.
+
+           West = left.
+        */
+
+        const distance =
+            skyRadius *
+            Math.cos(
+                altitudeRadians
+            );
+
+
+        let x =
+            centreX +
+            Math.sin(
+                azimuthRadians
+            ) *
+            distance;
+
+
+        let y =
+            centreY -
+            Math.cos(
+                azimuthRadians
+            ) *
+            distance;
+
+
+        /*
+           Push the lowest stars slightly down
+           so the screen feels like a view of the sky.
+        */
+
+        const edgeFade =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    (horizontal.altitude + 5) / 25
+                )
+            );
+
+
+        if (
+            x < -30 ||
+            x > width + 30 ||
+            y < -30 ||
+            y > height + 30
+        ) {
+
+            return;
+
+        }
+
+
+        visibleStars.push({
+
+            x,
+            y,
+            magnitude,
+            altitude:
+                horizontal.altitude,
+            alpha:
+                edgeFade
+
+        });
+
+    });
+
+
+    visibleStars.sort(
+        (a, b) =>
+            b.magnitude -
+            a.magnitude
     );
 
 
-    ctx.save();
+    /* =====================================================
+       DRAW REAL STARS
+    ====================================================== */
+
+    visibleStars.forEach(star => {
+
+        /*
+           Magnitude:
+
+           Lower number = brighter.
+
+           This keeps the important stars
+           noticeably brighter.
+        */
+
+        const brightness =
+            Math.max(
+                0.12,
+                Math.min(
+                    1,
+                    1.35 -
+                    (star.magnitude / 6)
+                )
+            );
 
 
-    const isMobile =
-        width <= 600;
+        const radius =
+            Math.max(
+                0.45,
+                Math.min(
+                    3.8,
+                    0.65 +
+                    brightness * 2.4
+                )
+            );
 
 
-    ctx.strokeStyle =
-        isMobile
+        ctx.beginPath();
 
-            ? "rgba(255,235,150,0.72)"
-
-            : "rgba(255,240,170,0.55)";
-
-
-    ctx.lineWidth =
-        isMobile
-            ? 1.5
-            : 1;
+        ctx.arc(
+            star.x,
+            star.y,
+            radius,
+            0,
+            Math.PI * 2
+        );
 
 
-    ctx.shadowBlur =
-        isMobile
-            ? 5
-            : 4;
+        ctx.fillStyle =
+            `rgba(
+                255,
+                248,
+                220,
+                ${Math.min(
+                    1,
+                    brightness *
+                    star.alpha
+                )}
+            )`;
 
 
-    ctx.shadowColor =
-        "rgba(120,160,255,0.3)";
+        ctx.shadowBlur =
+            brightness * 8;
 
 
-    lines.forEach(
-        line => {
-
-            const pair =
-                getLinePair(
-                    line
-                );
+        ctx.shadowColor =
+            "rgba(255,240,190,0.9)";
 
 
-            if (!pair) {
-                return;
-            }
+        ctx.fill();
 
 
-            const a =
-                starPositions.get(
-                    pair[0]
-                );
+        /*
+           Very bright stars get a tiny glow cross.
+        */
 
+        if (
+            star.magnitude <= 1.5
+        ) {
 
-            const b =
-                starPositions.get(
-                    pair[1]
-                );
+            ctx.globalAlpha =
+                0.45 * star.alpha;
 
+            ctx.strokeStyle =
+                "rgba(255,245,205,0.8)";
 
-            if (!a || !b) {
-                return;
-            }
+            ctx.lineWidth =
+                0.5;
 
 
             ctx.beginPath();
 
-
             ctx.moveTo(
-                a.x,
-                a.y
+                star.x - 5,
+                star.y
             );
-
 
             ctx.lineTo(
-                b.x,
-                b.y
+                star.x + 5,
+                star.y
             );
 
+            ctx.moveTo(
+                star.x,
+                star.y - 5
+            );
+
+            ctx.lineTo(
+                star.x,
+                star.y + 5
+            );
 
             ctx.stroke();
 
-        }
-    );
+            ctx.globalAlpha =
+                1;
 
-
-    ctx.restore();
-}
-
-
-/* =========================================================
-   MEMORY CONSTELLATION
-========================================================= */
-
-function drawMemoryConstellation(
-    ctx,
-    memoryIndex,
-    width,
-    height
-) {
-    const pattern =
-        memoryConstellations[
-            memoryIndex % memoryConstellations.length
-        ];
-
-    // Position the constellation more centrally
-    const startX = width * 0.5;
-    const startY = height * 0.43;
-
-    // Make it smaller and more elegant
-    const scaleX = width * 0.004;
-    const scaleY = height * 0.004;
-
-    const points = pattern.map(point => {
-        return {
-            x:
-                startX +
-                (point[0] - 40) * scaleX,
-
-            y:
-                startY +
-                (point[1] - 20) * scaleY
-        };
-    });
-
-    /*
-     * -----------------------------------------------------
-     * CONSTELLATION LINES
-     * -----------------------------------------------------
-     */
-
-    ctx.save();
-
-    ctx.beginPath();
-
-    points.forEach((point, index) => {
-
-        if (index === 0) {
-            ctx.moveTo(
-                point.x,
-                point.y
-            );
-        }
-        else {
-            ctx.lineTo(
-                point.x,
-                point.y
-            );
         }
 
     });
 
-    ctx.strokeStyle =
-        "rgba(255,240,190,0.45)";
 
-    ctx.lineWidth = 1;
-
-    ctx.shadowBlur = 6;
-
-    ctx.shadowColor =
-        "rgba(255,220,130,0.4)";
-
-    ctx.stroke();
-
-    ctx.restore();
+    ctx.shadowBlur =
+        0;
 
 
-    /*
-     * -----------------------------------------------------
-     * CONSTELLATION STARS
-     * -----------------------------------------------------
-     */
+    /* =====================================================
+       VERY SUBTLE HORIZON FADE
 
-    points.forEach((point, index) => {
+       No circle.
+       No compass.
+       No pizza slice.
+    ====================================================== */
 
-        ctx.save();
-
-        /*
-         * Main star
-         */
-
-        ctx.beginPath();
-
-        ctx.arc(
-            point.x,
-            point.y,
-            index === 0 ? 4 : 2.5,
+    const horizonGradient =
+        ctx.createLinearGradient(
             0,
-            Math.PI * 2
-        );
-
-        ctx.fillStyle =
-            "#fff9dc";
-
-        ctx.shadowBlur =
-            index === 0 ? 18 : 10;
-
-        ctx.shadowColor =
-            "rgba(255,225,140,0.9)";
-
-        ctx.fill();
-
-
-        /*
-         * Tiny glow around each star
-         */
-
-        ctx.beginPath();
-
-        ctx.arc(
-            point.x,
-            point.y,
-            index === 0 ? 7 : 4,
+            height * 0.78,
             0,
-            Math.PI * 2
-        );
-
-        ctx.fillStyle =
-            "rgba(255,230,150,0.08)";
-
-        ctx.shadowBlur = 0;
-
-        ctx.fill();
-
-        ctx.restore();
-    });
-}
-
-
-/* =========================================================
-   SHOW HISTORICAL SKY
-========================================================= */
-
-function showHistoricalSky(
-    memory
-) {
-
-    historicalSkyTitle.textContent =
-        "The sky above us";
-
-
-    historicalSkyDate.textContent =
-        `${memory.skyDate} · ${formatSkyTime(memory.skyTime)}`;
-
-
-    historicalSkyLocation.textContent =
-        memory.skyLocation.name;
-
-
-    historicalSky.classList.add(
-        "visible"
-    );
-
-
-    drawHistoricalSky(
-        memory
-    );
-}
-
-
-/* =========================================================
-   FORMAT SKY TIME
-========================================================= */
-
-function formatSkyTime(
-    time
-) {
-
-    const [
-        hourString,
-        minuteString
-    ] =
-        time.split(":");
-
-
-    let hour =
-        Number(
-            hourString
+            height
         );
 
 
-    const minute =
-        minuteString;
+    horizonGradient.addColorStop(
+        0,
+        "rgba(2,6,18,0)"
+    );
+
+    horizonGradient.addColorStop(
+        1,
+        "rgba(1,3,10,0.75)"
+    );
 
 
-    const suffix =
-        hour >= 12
-            ? "PM"
-            : "AM";
+    ctx.fillStyle =
+        horizonGradient;
 
 
-    hour =
-        hour % 12 ||
-        12;
+    ctx.fillRect(
+        0,
+        height * 0.78,
+        width,
+        height * 0.22
+    );
 
-
-    return `${hour}:${minute} ${suffix}`;
 }
 
 
@@ -2394,6 +1430,7 @@ function closeHistoricalSkyPanel() {
     historicalSky.classList.remove(
         "visible"
     );
+
 }
 
 
@@ -2404,7 +1441,7 @@ closeHistoricalSky.addEventListener(
 
 
 /* =========================================================
-   REDRAW ON WINDOW RESIZE
+   REDRAW HISTORICAL SKY ON RESIZE
 ========================================================= */
 
 window.addEventListener(
@@ -2417,36 +1454,26 @@ window.addEventListener(
             )
         ) {
 
-            const visibleDate =
-                historicalSkyDate.textContent;
+            /*
+               Find the currently displayed
+               historical memory.
 
+               The first dated memory is used
+               as a safe fallback.
+            */
 
-            const memory =
+            const datedMemory =
                 memories.find(
-                    item => {
-
-                        if (
-                            !item.skyDate
-                        ) {
-
-                            return false;
-                        }
-
-
-                        return (
-                            visibleDate.includes(
-                                item.skyDate
-                            )
-                        );
-
-                    }
+                    memory =>
+                        memory.skyDate
                 );
 
 
-            if (memory) {
+            if (datedMemory) {
 
                 drawHistoricalSky(
-                    memory
+                    datedMemory.skyDate,
+                    0
                 );
 
             }
@@ -2469,14 +1496,13 @@ function showSpecialSky(
     specialTitle.textContent =
         title;
 
-
     specialText.textContent =
         text;
-
 
     specialSky.classList.add(
         "visible"
     );
+
 }
 
 
@@ -2500,7 +1526,8 @@ startButton.addEventListener(
     "click",
     () => {
 
-        gameStarted = true;
+        gameStarted =
+            true;
 
 
         intro.classList.add(
@@ -2533,17 +1560,26 @@ startButton.addEventListener(
 
 function beginFinalReveal() {
 
-    if (
-        finalRevealStarted
-    ) {
-
+    if (finalRevealStarted) {
         return;
     }
 
 
-    finalRevealStarted = true;
+    finalRevealStarted =
+        true;
 
-    document.body.classList.add("final-reveal");
+
+    /*
+       IMPORTANT:
+
+       This stops the original background
+       stars from rapidly flashing while
+       LAURA is forming.
+    */
+
+    document.body.classList.add(
+        "final-reveal"
+    );
 
 
     counter.classList.remove(
@@ -2552,10 +1588,7 @@ function beginFinalReveal() {
 
 
     memoryStars.forEach(
-        (
-            star,
-            index
-        ) => {
+        (star, index) => {
 
             const angle =
                 (
@@ -2568,8 +1601,7 @@ function beginFinalReveal() {
 
             const distance =
                 15 +
-                Math.random() *
-                18;
+                Math.random() * 18;
 
 
             const newX =
@@ -2611,6 +1643,7 @@ function beginFinalReveal() {
         createLauraConstellation,
         1800
     );
+
 }
 
 
@@ -2759,20 +1792,19 @@ function createLauraConstellation() {
 
 
     lauraCoordinates.forEach(
-        (
-            coordinate,
-            index
-        ) => {
+        (coordinate, index) => {
 
             const star =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             star.className =
                 "final-star";
 
+
+            /*
+               Random starting location.
+            */
 
             star.style.left =
                 (
@@ -2798,26 +1830,25 @@ function createLauraConstellation() {
             );
 
 
+            /*
+               Move into LAURA.
+            */
+
             setTimeout(
                 () => {
 
                     star.style.left =
-                        coordinate[0] +
-                        "%";
-
+                        coordinate[0] + "%";
 
                     star.style.top =
-                        coordinate[1] +
-                        "%";
-
+                        coordinate[1] + "%";
 
                     star.classList.add(
                         "arrived"
                     );
 
                 },
-                100 +
-                index * 55
+                100 + index * 55
             );
 
         }
@@ -2846,6 +1877,7 @@ function createLauraConstellation() {
         },
         5200
     );
+
 }
 
 
@@ -2858,10 +1890,7 @@ function drawLauraLines(
 ) {
 
     lauraConnections.forEach(
-        (
-            connection,
-            index
-        ) => {
+        (connection, index) => {
 
             const starA =
                 stars[
@@ -2881,6 +1910,7 @@ function drawLauraLines(
             ) {
 
                 return;
+
             }
 
 
@@ -2918,6 +1948,7 @@ function drawLauraLines(
         80 +
         1000
     );
+
 }
 
 
@@ -2959,13 +1990,11 @@ function drawLineBetween(
 
 
     const dx =
-        x2 -
-        x1;
+        x2 - x1;
 
 
     const dy =
-        y2 -
-        y1;
+        y2 - y1;
 
 
     const distance =
@@ -2995,18 +2024,15 @@ function drawLineBetween(
 
 
     line.style.left =
-        x1 +
-        "px";
+        x1 + "px";
 
 
     line.style.top =
-        y1 +
-        "px";
+        y1 + "px";
 
 
     line.style.width =
-        distance +
-        "px";
+        distance + "px";
 
 
     line.style.transform =
@@ -3027,6 +2053,7 @@ function drawLineBetween(
 
         }
     );
+
 }
 
 
