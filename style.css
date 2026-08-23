@@ -52,6 +52,9 @@ body {
     z-index: 1;
 
     pointer-events: none;
+
+    transition:
+        opacity 2s ease;
 }
 
 .background-star {
@@ -68,7 +71,8 @@ body {
     opacity: 0.5;
 
     animation:
-        twinkle var(--duration)
+        twinkle
+        var(--duration)
         ease-in-out
         infinite
         alternate;
@@ -76,22 +80,58 @@ body {
     pointer-events: none;
 }
 
+
 @keyframes twinkle {
 
     from {
+
         opacity: 0.15;
-        transform: scale(0.7);
+
+        transform:
+            scale(0.7);
     }
 
     to {
+
         opacity: 0.85;
-        transform: scale(1.4);
+
+        transform:
+            scale(1.4);
     }
 }
 
 
 /* =========================================================
-   INTRODUCTION
+   FREEZE BACKGROUND DURING FINAL REVEAL
+========================================================= */
+
+body.final-reveal
+.background-star {
+
+    animation-play-state:
+        paused;
+
+    opacity:
+        0.35;
+
+    transition:
+        opacity 1.5s ease;
+}
+
+
+body.final-reveal
+#background {
+
+    opacity:
+        0.65;
+
+    transition:
+        opacity 2s ease;
+}
+
+
+/* =========================================================
+   INTRO
 ========================================================= */
 
 .intro {
@@ -102,12 +142,18 @@ body {
     left: 50%;
 
     transform:
-        translate(-50%, -50%);
+        translate(
+            -50%,
+            -50%
+        );
 
     text-align: center;
 
     width:
-        min(90%, 600px);
+        min(
+            90%,
+            600px
+        );
 
     z-index: 50;
 
@@ -116,15 +162,20 @@ body {
         transform 1.2s ease;
 }
 
+
 .intro.hidden {
 
     opacity: 0;
 
     transform:
-        translate(-50%, -55%);
+        translate(
+            -50%,
+            -55%
+        );
 
     pointer-events: none;
 }
+
 
 .intro h1 {
 
@@ -141,6 +192,7 @@ body {
 
     letter-spacing: 3px;
 }
+
 
 .intro p {
 
@@ -170,12 +222,22 @@ body {
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.4);
+        rgba(
+            255,
+            255,
+            255,
+            0.4
+        );
 
     border-radius: 30px;
 
     background:
-        rgba(255, 255, 255, 0.08);
+        rgba(
+            255,
+            255,
+            255,
+            0.08
+        );
 
     color: white;
 
@@ -189,10 +251,16 @@ body {
         all 0.3s ease;
 }
 
+
 .start-button:hover {
 
     background:
-        rgba(255, 255, 255, 0.18);
+        rgba(
+            255,
+            255,
+            255,
+            0.18
+        );
 
     transform:
         translateY(-2px);
@@ -217,16 +285,31 @@ body {
             circle,
             #fff 0%,
             #fff5c7 35%,
-            rgba(255, 220, 130, 0.5) 65%,
+            rgba(
+                255,
+                220,
+                130,
+                0.5
+            ) 65%,
             transparent 100%
         );
 
     box-shadow:
         0 0 8px
-        rgba(255, 240, 170, 0.8),
+        rgba(
+            255,
+            240,
+            170,
+            0.8
+        ),
 
         0 0 18px
-        rgba(255, 220, 130, 0.35);
+        rgba(
+            255,
+            220,
+            130,
+            0.35
+        );
 
     cursor: pointer;
 
@@ -252,12 +335,14 @@ body {
         alternate;
 }
 
+
 .memory-star.active {
 
     opacity: 1;
 
     pointer-events: auto;
 }
+
 
 @keyframes memoryTwinkle {
 
@@ -277,6 +362,7 @@ body {
         opacity: 1;
     }
 }
+
 
 .memory-star:hover {
 
@@ -299,23 +385,48 @@ body {
             #ffffff 0%,
             #fffde8 20%,
             #fff2a8 45%,
-            rgba(255, 220, 100, 0.65) 70%,
+            rgba(
+                255,
+                220,
+                100,
+                0.65
+            ) 70%,
             transparent 100%
         );
 
     box-shadow:
 
         0 0 10px
-        rgba(255, 255, 255, 1),
+        rgba(
+            255,
+            255,
+            255,
+            1
+        ),
 
         0 0 22px
-        rgba(255, 240, 150, 1),
+        rgba(
+            255,
+            240,
+            150,
+            1
+        ),
 
         0 0 45px
-        rgba(255, 215, 90, 0.9),
+        rgba(
+            255,
+            215,
+            90,
+            0.9
+        ),
 
         0 0 75px
-        rgba(255, 210, 80, 0.45);
+        rgba(
+            255,
+            210,
+            80,
+            0.45
+        );
 
     filter:
         brightness(1.7);
@@ -344,11 +455,21 @@ body {
     border-radius: 20px;
 
     background:
-        rgba(255, 255, 255, 0.07);
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.12);
+        rgba(
+            255,
+            255,
+            255,
+            0.12
+        );
 
     font-size: 0.85rem;
 
@@ -358,6 +479,7 @@ body {
         opacity 0.8s ease;
 }
 
+
 .counter.visible {
 
     opacity: 0.75;
@@ -366,6 +488,8 @@ body {
 
 /* =========================================================
    MEMORY MESSAGE
+
+   Kept at the bottom like you wanted.
 ========================================================= */
 
 .memory-panel {
@@ -373,22 +497,18 @@ body {
     position: absolute;
 
     left: 50%;
-    bottom: 9%;
 
-    background:
-        rgba(2, 5, 18, 0.35);
-
-    padding:
-        15px 25px;
-
-    border-radius: 20px;
+    bottom: 7%;
 
     transform:
         translateX(-50%)
         translateY(20px);
 
     width:
-        min(90%, 650px);
+        min(
+            90%,
+            650px
+        );
 
     text-align: center;
 
@@ -403,6 +523,7 @@ body {
         transform 0.6s ease;
 }
 
+
 .memory-panel.visible {
 
     opacity: 1;
@@ -413,6 +534,7 @@ body {
 
     pointer-events: auto;
 }
+
 
 .memory-text {
 
@@ -427,8 +549,14 @@ body {
 
     text-shadow:
         0 0 15px
-        rgba(255, 255, 255, 0.2);
+        rgba(
+            255,
+            255,
+            255,
+            0.2
+        );
 }
+
 
 .close-memory {
 
@@ -439,12 +567,22 @@ body {
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.25);
+        rgba(
+            255,
+            255,
+            255,
+            0.25
+        );
 
     border-radius: 20px;
 
     background:
-        rgba(255, 255, 255, 0.05);
+        rgba(
+            255,
+            255,
+            255,
+            0.05
+        );
 
     color: white;
 
@@ -455,76 +593,38 @@ body {
 
 
 /* =========================================================
-   HISTORICAL SKY PANEL
+   HISTORICAL SKY
+
+   NO CIRCLE.
+   NO COMPASS.
+   NO PIZZA SLICE.
 ========================================================= */
 
 .historical-sky {
+
     position: absolute;
+
     inset: 0;
+
     z-index: 55;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
     background:
-        radial-gradient(
-            circle at 50% 45%,
-            rgba(18, 35, 72, 0.96),
-            rgba(1, 4, 15, 0.99)
-        );
+        #020611;
 
     opacity: 0;
+
     pointer-events: none;
 
     transition:
         opacity 0.8s ease;
 }
 
+
 .historical-sky.visible {
+
     opacity: 1;
+
     pointer-events: auto;
-}
-
-
-/* =========================================================
-   HISTORICAL SKY TITLE
-========================================================= */
-
-.historical-sky h2 {
-    position: relative;
-    z-index: 5;
-
-    font-size:
-        clamp(1.5rem, 4vw, 2.5rem);
-
-    font-weight: normal;
-
-    margin:
-        0 0 5px;
-
-    text-shadow:
-        0 0 15px rgba(255,255,255,0.25);
-}
-
-
-/* =========================================================
-   HISTORICAL SKY DATE
-========================================================= */
-
-.historical-sky-date {
-    position: relative;
-    z-index: 5;
-
-    font-size: 0.95rem;
-
-    opacity: 0.8;
-
-    margin-bottom: 15px;
-
-    text-shadow:
-        0 0 10px rgba(255,255,255,0.2);
 }
 
 
@@ -533,261 +633,166 @@ body {
 ========================================================= */
 
 #historicalSkyCanvas {
+
     position: absolute;
+
     inset: 0;
 
     width: 100%;
     height: 100%;
 
+    display: block;
+
     pointer-events: none;
 }
 
 
 /* =========================================================
-   CLOSE BUTTON
+   HISTORICAL SKY TEXT
 ========================================================= */
 
-.historical-sky-close {
-    position: relative;
-    z-index: 5;
+.historical-sky-content {
 
-    margin-top: 20px;
+    position: absolute;
 
-    padding:
-        9px 20px;
+    left: 50%;
 
-    border:
-        1px solid rgba(255,255,255,0.3);
+    top: 47%;
 
-    background:
-        rgba(255,255,255,0.07);
+    transform:
+        translate(
+            -50%,
+            -50%
+        );
 
-    color: white;
-
-    border-radius: 25px;
-
-    cursor: pointer;
-
-    font-family: inherit;
-
-    box-shadow:
-        0 0 15px rgba(255,255,255,0.05);
-
-    backdrop-filter:
-        blur(4px);
-}
-
-
-/* =========================================================
-   MOBILE HISTORICAL SKY
-========================================================= */
-
-@media (max-width: 600px) {
-
-    .historical-sky {
-        background:
-            radial-gradient(
-                circle at 50% 42%,
-                rgba(12, 27, 62, 0.98),
-                rgba(1, 3, 12, 1) 75%
-            );
-    }
-
-
-    .historical-sky h2 {
-
-        font-size:
-            clamp(1.35rem, 6vw, 2rem);
-
-        margin-top: -8vh;
-
-        text-shadow:
-            0 0 12px rgba(255,255,255,0.35);
-    }
-
-
-    .historical-sky-date {
-
-        font-size: 0.85rem;
-
-        margin-bottom: 10px;
-
-        opacity: 0.85;
-    }
-
-
-    .historical-sky-close {
-
-        margin-top: 14px;
-
-        padding:
-            9px 18px;
-
-        font-size: 0.85rem;
-    }
-}
-
-
-/* =========================================================
-   SKY INFORMATION
-========================================================= */
-
-.sky-overlay {
-
-    position: relative;
-
-    z-index: 5;
+    width:
+        min(
+            90%,
+            700px
+        );
 
     text-align: center;
 
+    z-index: 5;
+
     pointer-events: none;
 
-    margin-top: -8px;
+    text-shadow:
+        0 2px 12px
+        rgba(
+            0,
+            0,
+            0,
+            0.65
+        );
 }
+
 
 .historical-sky h2 {
 
+    margin:
+        0 0 6px;
+
     font-size:
         clamp(
-            1.5rem,
-            4vw,
-            2.5rem
+            1.8rem,
+            5vw,
+            3rem
         );
 
-    font-weight: normal;
-
-    margin:
-        0 0 5px;
-
-    text-shadow:
-        0 0 20px
-        rgba(255, 255, 255, 0.3);
+    font-weight:
+        normal;
 }
+
 
 .historical-sky-date {
 
-    font-size: 0.95rem;
+    font-size:
+        clamp(
+            0.85rem,
+            2vw,
+            1rem
+        );
 
-    opacity: 0.8;
-
-    margin-top: 5px;
+    opacity:
+        0.8;
 }
+
 
 .historical-sky-location {
 
-    font-size: 0.85rem;
+    margin-top:
+        10px;
 
-    opacity: 0.55;
+    font-size:
+        0.95rem;
 
-    margin-top: 4px;
+    opacity:
+        0.65;
 }
 
 
 /* =========================================================
-   SKY HORIZON
-========================================================= */
-
-.sky-horizon {
-
-    position: absolute;
-
-    left: 50%;
-    top: 50%;
-
-    width: 78vmin;
-    height: 78vmin;
-
-    transform:
-        translate(-50%, -50%);
-
-    border:
-        1px solid
-        rgba(255, 255, 255, 0.08);
-
-    border-radius: 50%;
-
-    pointer-events: none;
-
-    z-index: 2;
-
-    box-shadow:
-        0 0 60px
-        rgba(100, 150, 255, 0.04);
-}
-
-
-/* =========================================================
-   SKY CARD / LEGEND
-========================================================= */
-
-.sky-help {
-
-    position: absolute;
-
-    left: 50%;
-
-    bottom: 88px;
-
-    transform:
-        translateX(-50%);
-
-    z-index: 5;
-
-    font-size: 0.72rem;
-
-    opacity: 0.35;
-
-    text-align: center;
-
-    pointer-events: none;
-
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   HISTORICAL SKY CLOSE
+   HISTORICAL SKY BUTTON
 ========================================================= */
 
 .historical-sky-close {
 
-    position: absolute;
+    pointer-events:
+        auto;
 
-    bottom: 35px;
-
-    left: 50%;
-
-    transform:
-        translateX(-50%);
-
-    z-index: 8;
+    margin-top:
+        25px;
 
     padding:
         9px 20px;
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.3);
+        rgba(
+            255,
+            255,
+            255,
+            0.3
+        );
 
     background:
-        rgba(255, 255, 255, 0.07);
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
 
-    color: white;
+    color:
+        white;
 
-    border-radius: 25px;
+    border-radius:
+        25px;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
-    font-family: inherit;
+    font-family:
+        inherit;
 
     transition:
-        background 0.3s ease;
+        all 0.3s ease;
 }
+
 
 .historical-sky-close:hover {
 
     background:
-        rgba(255, 255, 255, 0.15);
+        rgba(
+            255,
+            255,
+            255,
+            0.14
+        );
+
+    transform:
+        translateY(-2px);
 }
 
 
@@ -806,8 +811,18 @@ body {
     background:
         radial-gradient(
             circle at 50% 35%,
-            rgba(40, 65, 120, 0.85),
-            rgba(3, 7, 20, 0.97)
+            rgba(
+                40,
+                65,
+                120,
+                0.85
+            ),
+            rgba(
+                3,
+                7,
+                20,
+                0.97
+            )
         );
 
     display: flex;
@@ -828,12 +843,14 @@ body {
         opacity 1s ease;
 }
 
+
 .special-sky.visible {
 
     opacity: 1;
 
     pointer-events: auto;
 }
+
 
 .special-sky h2 {
 
@@ -844,43 +861,66 @@ body {
             3rem
         );
 
-    font-weight: normal;
+    font-weight:
+        normal;
 
-    margin-bottom: 12px;
+    margin-bottom:
+        12px;
 }
+
 
 .special-sky p {
 
-    max-width: 600px;
+    max-width:
+        600px;
 
-    width: 90%;
+    width:
+        90%;
 
-    line-height: 1.7;
+    line-height:
+        1.7;
 
-    opacity: 0.85;
+    opacity:
+        0.85;
 }
+
 
 .close-sky {
 
-    margin-top: 25px;
+    margin-top:
+        25px;
 
     padding:
         10px 22px;
 
     border:
         1px solid
-        rgba(255, 255, 255, 0.3);
+        rgba(
+            255,
+            255,
+            255,
+            0.3
+        );
 
     background:
-        rgba(255, 255, 255, 0.07);
+        rgba(
+            255,
+            255,
+            255,
+            0.07
+        );
 
-    color: white;
+    color:
+        white;
 
-    border-radius: 25px;
+    border-radius:
+        25px;
 
-    cursor: pointer;
+    cursor:
+        pointer;
 
-    font-family: inherit;
+    font-family:
+        inherit;
 }
 
 
@@ -909,32 +949,61 @@ body {
     box-shadow:
 
         0 0 8px
-        rgba(255, 245, 190, 1),
+        rgba(
+            255,
+            245,
+            190,
+            1
+        ),
 
         0 0 18px
-        rgba(255, 220, 100, 0.9),
+        rgba(
+            255,
+            220,
+            100,
+            0.9
+        ),
 
         0 0 35px
-        rgba(255, 210, 100, 0.45);
+        rgba(
+            255,
+            210,
+            100,
+            0.45
+        );
 
-    z-index: 30;
+    z-index:
+        30;
 
-    opacity: 0;
+    opacity:
+        0;
 
     transition:
 
         left 2.2s
-        cubic-bezier(0.2, 0.8, 0.2, 1),
+        cubic-bezier(
+            0.2,
+            0.8,
+            0.2,
+            1
+        ),
 
         top 2.2s
-        cubic-bezier(0.2, 0.8, 0.2, 1),
+        cubic-bezier(
+            0.2,
+            0.8,
+            0.2,
+            1
+        ),
 
         opacity 1s ease;
 }
 
+
 .final-star.arrived {
 
-    opacity: 1;
+    opacity:
+        1;
 
     animation:
         finalPulse
@@ -943,6 +1012,7 @@ body {
         infinite
         alternate;
 }
+
 
 @keyframes finalPulse {
 
@@ -953,7 +1023,12 @@ body {
 
         box-shadow:
             0 0 7px
-            rgba(255, 245, 190, 0.8);
+            rgba(
+                255,
+                245,
+                190,
+                0.8
+            );
     }
 
     to {
@@ -964,10 +1039,20 @@ body {
         box-shadow:
 
             0 0 12px
-            rgba(255, 245, 190, 1),
+            rgba(
+                255,
+                245,
+                190,
+                1
+            ),
 
             0 0 28px
-            rgba(255, 220, 100, 0.9);
+            rgba(
+                255,
+                220,
+                100,
+                0.9
+            );
     }
 }
 
@@ -978,9 +1063,11 @@ body {
 
 .final-line {
 
-    position: absolute;
+    position:
+        absolute;
 
-    height: 1px;
+    height:
+        1px;
 
     transform-origin:
         0 50%;
@@ -988,26 +1075,52 @@ body {
     background:
         linear-gradient(
             to right,
-            rgba(255, 245, 200, 0),
-            rgba(255, 245, 200, 0.75),
-            rgba(255, 245, 200, 0)
+            rgba(
+                255,
+                245,
+                200,
+                0
+            ),
+
+            rgba(
+                255,
+                245,
+                200,
+                0.75
+            ),
+
+            rgba(
+                255,
+                245,
+                200,
+                0
+            )
         );
 
     box-shadow:
         0 0 5px
-        rgba(255, 230, 150, 0.35);
+        rgba(
+            255,
+            230,
+            150,
+            0.35
+        );
 
-    z-index: 25;
+    z-index:
+        25;
 
-    opacity: 0;
+    opacity:
+        0;
 
     transition:
         opacity 0.8s ease;
 }
 
+
 .final-line.visible {
 
-    opacity: 1;
+    opacity:
+        1;
 }
 
 
@@ -1017,40 +1130,53 @@ body {
 
 .final-message {
 
-    position: absolute;
+    position:
+        absolute;
 
-    left: 50%;
+    left:
+        50%;
 
-    bottom: 8%;
+    bottom:
+        8%;
 
     transform:
         translateX(-50%)
         translateY(20px);
 
     width:
-        min(90%, 650px);
+        min(
+            90%,
+            650px
+        );
 
-    text-align: center;
+    text-align:
+        center;
 
-    z-index: 50;
+    z-index:
+        50;
 
-    opacity: 0;
+    opacity:
+        0;
 
     transition:
         opacity 1.5s ease,
         transform 1.5s ease;
 
-    pointer-events: none;
+    pointer-events:
+        none;
 }
+
 
 .final-message.visible {
 
-    opacity: 1;
+    opacity:
+        1;
 
     transform:
         translateX(-50%)
         translateY(0);
 }
+
 
 .final-message p {
 
@@ -1061,18 +1187,24 @@ body {
             1.5rem
         );
 
-    line-height: 1.7;
+    line-height:
+        1.7;
 
-    margin: 8px 0;
+    margin:
+        8px 0;
 }
+
 
 .final-message .small {
 
-    font-size: 0.9rem;
+    font-size:
+        0.9rem;
 
-    opacity: 0.65;
+    opacity:
+        0.65;
 
-    margin-top: 18px;
+    margin-top:
+        18px;
 }
 
 
@@ -1090,6 +1222,7 @@ body {
         alternate;
 }
 
+
 @keyframes nameGlow {
 
     from {
@@ -1097,7 +1230,12 @@ body {
         filter:
             drop-shadow(
                 0 0 4px
-                rgba(255, 240, 170, 0.3)
+                rgba(
+                    255,
+                    240,
+                    170,
+                    0.3
+                )
             );
     }
 
@@ -1106,24 +1244,14 @@ body {
         filter:
             drop-shadow(
                 0 0 18px
-                rgba(255, 230, 120, 0.8)
+                rgba(
+                    255,
+                    230,
+                    120,
+                    0.8
+                )
             );
     }
-}
-
-/* =========================================================
-   FINAL LAURA REVEAL
-   ========================================================= */
-
-body.final-reveal .background-star {
-    animation-play-state: paused;
-    opacity: 0.35;
-    transition: opacity 1.5s ease;
-}
-
-body.final-reveal #background {
-    opacity: 0.65;
-    transition: opacity 2s ease;
 }
 
 
@@ -1135,40 +1263,52 @@ body.final-reveal #background {
 
     .memory-star {
 
-        width: 8px;
-        height: 8px;
+        width:
+            8px;
+
+        height:
+            8px;
     }
+
 
     .final-star {
 
-        width: 7px;
-        height: 7px;
+        width:
+            7px;
+
+        height:
+            7px;
     }
+
 
     .counter {
 
-        top: 15px;
-        right: 15px;
+        top:
+            15px;
+
+        right:
+            15px;
     }
+
+
+    .memory-panel {
+
+        bottom:
+            6%;
+    }
+
 
     .final-message {
 
-        bottom: 6%;
+        bottom:
+            6%;
     }
 
-    .sky-horizon {
 
-        width: 90vmin;
-        height: 90vmin;
+    .historical-sky-content {
+
+        top:
+            45%;
     }
 
-    .sky-help {
-
-        display: none;
-    }
-
-    .historical-sky-close {
-
-        bottom: 20px;
-    }
 }
