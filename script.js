@@ -133,7 +133,7 @@ const memories = [
 
     {
         message:
-            "The first date. Quayside Bar & Grill in Dundee, then going to watch Michael, snuggled up together.",
+            "Our first date. Quayside Bar & Grill in Dundee, then going to watch Michael, snuggled up together.",
         type: "date",
         skyDate: "11 June 2026"
     },
@@ -248,14 +248,14 @@ const memories = [
 
     {
         message:
-            "January 18th. Your day.",
+            "January 18th. Your day. The day Laura arrived in the world.",
         type: "birthday",
         skyDate: "18 January 1989"
     },
 
     {
         message:
-            "18 January 1989. The day Laura arrived in the world.",
+            "Holding your hand on car journeys really makes me smile.",
         type: "normal"
     },
 
